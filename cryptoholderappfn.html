@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CryptoPanel HOLDER PRO - Mobile First</title>
+    <title>CryptoPanel HOLDER PRO v3.2 - Risk Integrated</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,13 +35,6 @@
                             full: '#ef4444'
                         }
                     },
-                    screens: {
-                        'xs': '375px',
-                        'sm': '640px',
-                        'md': '768px',
-                        'lg': '1024px',
-                        'xl': '1280px',
-                    },
                     animation: { 
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'pulse-accumulation': 'pulse 2s ease-in-out infinite'
@@ -67,15 +60,14 @@
         /* Table Optimization */
         .table-fixed-header thead { position: sticky; top: 0; z-index: 20; background-color: #0b0e14; box-shadow: 0 1px 0 rgba(255,255,255,0.1); }
         .table-row-hover:hover td { background-color: rgba(59, 130, 246, 0.08); }
-        /* Prevent text wrap on mobile tables for data integrity */
         .compact-table th, .compact-table td { white-space: nowrap; padding: 0.5rem 0.75rem !important; } 
         
-        /* Tooltip Overlay */
+        /* Tooltip Overlay Avançado */
         #metric-tooltip-overlay { 
             position: fixed; bottom: 0; left: 0; right: 0;
             height: auto; max-height: 80vh;
             background-color: #0b0e14;
-            border-top: 1px solid rgba(59, 130, 246, 0.4);
+            border-top: 2px solid #3b82f6;
             box-shadow: 0 -10px 40px rgba(0,0,0,0.9);
             z-index: 9999;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
@@ -84,14 +76,28 @@
             display: flex; flex-direction: column; gap: 1rem;
             padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
         }
-        @media(min-width: 1024px) { #metric-tooltip-overlay { flex-direction: row; max-height: 40vh; } }
+        @media(min-width: 1024px) { 
+            #metric-tooltip-overlay { 
+                flex-direction: row; max-height: 60vh; width: 500px; 
+                left: auto; right: 20px; bottom: 20px;
+                border: 1px solid #3b82f6; border-radius: 12px; 
+            } 
+        }
 
         .tooltip-hidden { transform: translateY(110%); opacity: 0; pointer-events: none; }
         .tooltip-visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
 
-        .tip-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #60a5fa; font-weight: 800; margin-bottom: 6px; border-bottom: 1px solid rgba(96, 165, 250, 0.2); display: inline-block; }
-        .tip-val { font-size: 0.95rem; color: #d1d5db; line-height: 1.5; }
-        
+        /* Estilos Internos do Tooltip */
+        .tt-section { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .tt-section:last-child { border-bottom: none; }
+        .tt-header { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; display: flex; items-center; gap: 6px; }
+        .tt-def { color: #60a5fa; } /* Definição (Blue) */
+        .tt-calc { color: #a78bfa; } /* Cálculo (Purple) */
+        .tt-ref { color: #34d399; } /* Referência (Green) */
+        .tt-strat { color: #facc15; } /* Estratégia (Yellow) */
+        .tt-trap { color: #f87171; } /* Armadilha (Red) */
+        .tt-text { font-size: 0.85rem; line-height: 1.4; color: #d1d5db; }
+
         /* Animations */
         .card-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -100,17 +106,7 @@
         .modal-overlay { background-color: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
         
         /* Indicators */
-        .dca-zone-indicator {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px dashed rgba(139, 92, 246, 0.4);
-        }
-        
         .historical-band { position: absolute; width: 100%; opacity: 0.1; z-index: 1; }
-        .band-0-20 { background: #059669; height: 20%; bottom: 0; }
-        .band-20-40 { background: #10b981; height: 20%; bottom: 20%; }
-        .band-40-60 { background: #3b82f6; height: 20%; bottom: 40%; }
-        .band-60-80 { background: #f59e0b; height: 20%; bottom: 60%; }
-        .band-80-100 { background: #ef4444; height: 20%; bottom: 80%; }
         
         /* Mobile Specific Utilities */
         .mobile-tab-active { border-bottom: 2px solid #22c55e; color: #22c55e; background: rgba(34, 197, 94, 0.1); }
@@ -133,7 +129,7 @@
         .zone-60-80 { background: #f59e0b; }
         .zone-80-100 { background: #ef4444; }
 
-        /* Hide Scrollbar for Cards Grid but allow horizontal if needed */
+        /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -142,9 +138,10 @@
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
             max-height: 0; opacity: 0; overflow: hidden;
         }
-        #mobile-controls.open {
-            max-height: 300px; opacity: 1;
-        }
+        #mobile-controls.open { max-height: 300px; opacity: 1; }
+        
+        /* Loading States */
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white">
@@ -156,10 +153,10 @@
                     <i class="fa-solid fa-chart-line text-white text-sm"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg text-white tracking-tight leading-none">CP<span class="text-holder-accumulation">HOLDER</span> <span class="text-[10px] text-gray-500 border border-gray-700 rounded px-1 align-middle ml-1">PRO</span></h1>
+                    <h1 class="font-bold text-lg text-white tracking-tight leading-none" data-tip="sys_title">CP<span class="text-holder-accumulation">HOLDER</span> <span class="text-[10px] text-gray-500 border border-gray-700 rounded px-1 align-middle ml-1">v3.2 RISK</span></h1>
                     <div class="flex items-center gap-2 text-[10px] text-gray-400 font-mono">
                         <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                        <span id="last-update">Syncing...</span>
+                        <span id="last-update" data-tip="sys_sync">Syncing...</span>
                     </div>
                 </div>
             </div>
@@ -176,15 +173,15 @@
                 
                 <div class="h-8 w-[1px] bg-gray-800 mx-1"></div>
 
-                <div class="flex flex-col items-end mr-2" data-tip="sys_auto_refresh">
+                <div class="flex flex-col items-end mr-2" data-tip="sys_auto">
                     <span class="text-[9px] text-gray-500 uppercase tracking-widest">Auto</span>
                     <span id="countdown-desktop" class="text-xs font-mono font-bold text-holder-accumulation">720s</span>
                 </div>
                 
                 <div class="flex gap-2">
-                    <button onclick="App.Export.openModal()" class="w-9 h-9 bg-dark-800 hover:text-green-400 border border-gray-700 rounded-lg transition-all flex items-center justify-center" title="Exportar"><i class="fa-solid fa-file-excel"></i></button>
-                    <button id="refreshDataDesktop" class="w-9 h-9 bg-holder-accumulation hover:bg-green-500 rounded-lg text-white shadow-lg flex items-center justify-center transition-all" title="Atualizar"><i class="fa-solid fa-rotate"></i></button>
-                    <button onclick="App.Settings.openModal()" class="w-9 h-9 bg-dark-800 hover:text-yellow-400 border border-gray-700 rounded-lg transition-all flex items-center justify-center" title="Configurações"><i class="fa-solid fa-gear"></i></button>
+                    <button onclick="App.Export.openModal()" class="w-9 h-9 bg-dark-800 hover:text-green-400 border border-gray-700 rounded-lg transition-all flex items-center justify-center" title="Exportar" data-tip="btn_export"><i class="fa-solid fa-file-excel"></i></button>
+                    <button id="refreshDataDesktop" class="w-9 h-9 bg-holder-accumulation hover:bg-green-500 rounded-lg text-white shadow-lg flex items-center justify-center transition-all" title="Atualizar" data-tip="btn_refresh"><i class="fa-solid fa-rotate"></i></button>
+                    <button onclick="App.Settings.openModal()" class="w-9 h-9 bg-dark-800 hover:text-yellow-400 border border-gray-700 rounded-lg transition-all flex items-center justify-center" title="Configurações" data-tip="btn_config"><i class="fa-solid fa-gear"></i></button>
                 </div>
             </div>
         </div>
@@ -213,15 +210,13 @@
 
     <div class="bg-dark-900 border-b border-gray-800 py-3 shadow-inner">
         <div class="max-w-[1800px] mx-auto px-4 flex flex-col sm:flex-row gap-3 overflow-x-auto no-scrollbar items-start sm:items-center">
-            <span class="font-bold text-gray-500 uppercase tracking-widest text-[10px] shrink-0 flex items-center cursor-help" data-tip="holder_intro">
-                <i class="fa-solid fa-info-circle mr-1"></i> Legenda:
+            <span class="font-bold text-gray-500 uppercase tracking-widest text-[10px] shrink-0 flex items-center cursor-help" data-tip="log_band">
+                <i class="fa-solid fa-info-circle mr-1"></i> Regressão Log (Fases):
             </span>
             <div class="flex gap-2 shrink-0 text-xs overflow-x-auto pb-1 w-full sm:w-auto">
-                <span class="px-2 py-1 bg-dark-800 border border-zone-agressive rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-zone-agressive mr-1"></span>0-20% Agressiva</span>
-                <span class="px-2 py-1 bg-dark-800 border border-zone-moderate rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-zone-moderate mr-1"></span>20-40% Moderada</span>
-                <span class="px-2 py-1 bg-dark-800 border border-zone-fair rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-zone-fair mr-1"></span>40-60% Justo</span>
-                <span class="px-2 py-1 bg-dark-800 border border-zone-partial rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-zone-partial mr-1"></span>60-80% Parcial</span>
-                <span class="px-2 py-1 bg-dark-800 border border-zone-full rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-zone-full mr-1"></span>80-100% Total</span>
+                <span class="px-2 py-1 bg-dark-800 border border-green-500/30 rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-green-500 mr-1"></span>0-20: Fundo (Compra)</span>
+                <span class="px-2 py-1 bg-dark-800 border border-blue-500/30 rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-blue-500 mr-1"></span>40-60: Meio (Hold)</span>
+                <span class="px-2 py-1 bg-dark-800 border border-red-500/30 rounded whitespace-nowrap text-[10px]"><span class="w-2 h-2 inline-block rounded-full bg-red-500 mr-1"></span>80-100: Topo (Venda)</span>
             </div>
         </div>
     </div>
@@ -230,8 +225,8 @@
         
         <section class="glass rounded-xl overflow-hidden border border-gray-800 flex flex-col shadow-xl">
             <div class="bg-dark-800/80 p-4 border-b border-gray-700 flex justify-between items-center shrink-0">
-                <h3 class="text-white font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-star text-yellow-500"></i> Top 10 Oportunidades</h3>
-                <span class="text-[10px] text-gray-500 bg-dark-950 px-2 py-1 rounded border border-gray-800">Ranking H.2.0</span>
+                <h3 class="text-white font-bold text-sm flex items-center gap-2" data-tip="table_header"><i class="fa-solid fa-star text-yellow-500"></i> Painel de Risco & Oportunidades (Quant v3.1)</h3>
+                <span class="text-[10px] text-gray-500 bg-dark-950 px-2 py-1 rounded border border-gray-800">Risk-Adjusted</span>
             </div>
             
             <div class="overflow-x-auto scrollbar-thin max-h-[400px]">
@@ -240,12 +235,12 @@
                         <tr>
                             <th class="p-3 text-center w-10">#</th>
                             <th class="p-3 sticky left-0 bg-dark-900 z-20 shadow-lg border-r border-gray-800">Ativo</th>
-                            <th class="p-3 text-center">Score</th>
-                            <th class="p-3 text-center">Fase</th>
-                            <th class="p-3 text-center">Zona Hist.</th>
+                            <th class="p-3 text-center" data-tip="score_total">Score 3.1</th>
+                            <th class="p-3 text-center" data-tip="log_zone">Zona Log</th>
                             <th class="p-3 text-right">Preço</th>
-                            <th class="p-3 text-center">Assimetria</th>
-                            <th class="p-3 text-center">Probab.</th>
+                            <th class="p-3 text-center" data-tip="asymmetry">Assimetria</th>
+                            <th class="p-3 text-center" data-tip="prob_emp">Prob. Real</th>
+                            <th class="p-3 text-center" data-tip="risk_class">Risco</th>
                             <th class="p-3 text-center min-w-[100px]">Ação</th>
                         </tr>
                     </thead>
@@ -257,47 +252,43 @@
         </section>
 
         <div class="sm:hidden flex rounded-lg bg-dark-800 p-1 border border-gray-700">
-            <button onclick="App.UI.switchTab('agressive')" id="tab-btn-agressive" class="flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-active">Agressiva</button>
-            <button onclick="App.UI.switchTab('fair')" id="tab-btn-fair" class="flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-inactive">Justo</button>
-            <button onclick="App.UI.switchTab('full')" id="tab-btn-full" class="flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-inactive">Realização</button>
+            <button onclick="App.UI.switchTab('agressive')" id="tab-btn-agressive" class="flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-active" data-tip="tab_acc">Acumulação</button>
+            <button onclick="App.UI.switchTab('fair')" id="tab-btn-fair" class="flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-inactive" data-tip="tab_hold">Justo</button>
+            <button onclick="App.UI.switchTab('full')" id="tab-btn-full" class="flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-inactive" data-tip="tab_dist">Realização</button>
         </div>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 relative">
-            
             <div id="zone-card-agressive" class="glass rounded-xl overflow-hidden border border-zone-agressive flex flex-col shadow-lg transition-all duration-300">
                 <div class="bg-dark-800/90 p-3 border-b border-zone-agressive flex justify-between items-center">
-                    <h3 class="text-zone-agressive font-bold text-xs uppercase tracking-wide gap-2 flex items-center"><i class="fa-solid fa-bolt"></i> Acumulação (0-20%)</h3>
+                    <h3 class="text-zone-agressive font-bold text-xs uppercase tracking-wide gap-2 flex items-center" data-tip="zone_buy"><i class="fa-solid fa-bolt"></i> Acumulação (Log Bottom)</h3>
                     <i class="fa-solid fa-arrow-down text-zone-agressive text-xs animate-bounce"></i>
                 </div>
                 <div class="overflow-y-auto flex-1 max-h-[300px] min-h-[200px]">
                     <table class="w-full text-left text-[11px] compact-table">
-                        <thead class="bg-dark-950 text-gray-500 sticky top-0"><tr><th class="p-2">Ativo</th><th class="p-2 text-right">Zona</th><th class="p-2 text-right">Risk/Reward</th></tr></thead>
-                        <tbody id="list-agressive" class="text-gray-300 divide-y divide-gray-800"></tbody>
+                         <tbody id="list-agressive" class="text-gray-300 divide-y divide-gray-800"></tbody>
                     </table>
                 </div>
             </div>
             
             <div id="zone-card-fair" class="glass rounded-xl overflow-hidden border border-zone-fair flex flex-col shadow-lg hidden md:flex transition-all duration-300">
                 <div class="bg-dark-800/90 p-3 border-b border-zone-fair flex justify-between items-center">
-                    <h3 class="text-zone-fair font-bold text-xs uppercase tracking-wide gap-2 flex items-center"><i class="fa-solid fa-scale-balanced"></i> Preço Justo (40-60%)</h3>
+                    <h3 class="text-zone-fair font-bold text-xs uppercase tracking-wide gap-2 flex items-center" data-tip="zone_hold"><i class="fa-solid fa-scale-balanced"></i> Preço Justo (Log Mid)</h3>
                 </div>
                 <div class="overflow-y-auto flex-1 max-h-[300px] min-h-[200px]">
-                    <table class="w-full text-left text-[11px] compact-table">
-                        <thead class="bg-dark-950 text-gray-500 sticky top-0"><tr><th class="p-2">Ativo</th><th class="p-2 text-center">Zona</th><th class="p-2 text-right">Rec.</th></tr></thead>
-                        <tbody id="list-fair" class="text-gray-300 divide-y divide-gray-800"></tbody>
+                     <table class="w-full text-left text-[11px] compact-table">
+                         <tbody id="list-fair" class="text-gray-300 divide-y divide-gray-800"></tbody>
                     </table>
                 </div>
             </div>
             
-            <div id="zone-card-full" class="glass rounded-xl overflow-hidden border border-zone-full flex flex-col shadow-lg hidden md:flex transition-all duration-300">
+            <div id="zone-card-full" class="glass rounded-xl overflow-hidden border border-zone-full flex flex-col shadow-lg hidden md:flex transitionall duration-300">
                 <div class="bg-dark-800/90 p-3 border-b border-zone-full flex justify-between items-center">
-                    <h3 class="text-zone-full font-bold text-xs uppercase tracking-wide gap-2 flex items-center"><i class="fa-solid fa-money-bill-wave"></i> Realização (80%+)</h3>
+                    <h3 class="text-zone-full font-bold text-xs uppercase tracking-wide gap-2 flex items-center" data-tip="zone_sell"><i class="fa-solid fa-money-bill-wave"></i> Realização (Log Top)</h3>
                     <i class="fa-solid fa-arrow-up text-zone-full text-xs animate-bounce"></i>
                 </div>
                 <div class="overflow-y-auto flex-1 max-h-[300px] min-h-[200px]">
-                    <table class="w-full text-left text-[11px] compact-table">
-                        <thead class="bg-dark-950 text-gray-500 sticky top-0"><tr><th class="p-2">Ativo</th><th class="p-2 text-right">Zona</th><th class="p-2 text-right">Alvo</th></tr></thead>
-                        <tbody id="list-full" class="text-gray-300 divide-y divide-gray-800"></tbody>
+                     <table class="w-full text-left text-[11px] compact-table">
+                         <tbody id="list-full" class="text-gray-300 divide-y divide-gray-800"></tbody>
                     </table>
                 </div>
             </div>
@@ -305,8 +296,8 @@
 
         <section id="alerts-panel" class="glass rounded-xl overflow-hidden border border-holder-dca_zone flex flex-col shadow-lg">
             <div class="bg-purple-900/10 p-3 border-b border-holder-dca_zone/30 flex justify-between items-center">
-                <h3 class="text-holder-dca_zone font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-bell"></i> Radar DCA</h3>
-                <button onclick="App.Alerts.openModal()" class="px-3 py-1.5 bg-holder-dca_zone/20 hover:bg-holder-dca_zone text-holder-dca_zone hover:text-white border border-holder-dca_zone rounded-lg text-xs font-bold transition-all">+ CRIAR</button>
+                <h3 class="text-holder-dca_zone font-bold text-sm flex items-center gap-2" data-tip="panel_alerts"><i class="fa-solid fa-bell"></i> Monitoramento de Alertas</h3>
+                <button onclick="App.Alerts.openModal()" class="px-3 py-1.5 bg-holder-dca_zone/20 hover:bg-holder-dca_zone text-holder-dca_zone hover:text-white border border-holder-dca_zone rounded-lg text-xs font-bold transition-all" data-tip="btn_add_alert">+ CRIAR</button>
             </div>
             <div class="p-3"><div id="alertsContent" class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar"></div></div>
         </section>
@@ -315,11 +306,8 @@
             <div class="flex items-center gap-2 w-full sm:w-auto">
                 <div class="relative group w-full sm:w-72">
                     <input type="text" id="add-input" placeholder="Adicionar TICKER (Ex: LINK)..." class="w-full bg-dark-900 border border-gray-700 rounded-lg pl-4 pr-10 py-3 text-sm focus:border-holder-accumulation outline-none uppercase shadow-inner transition-all font-mono">
-                    <button onclick="App.Token.add()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-dark-800 text-holder-accumulation hover:text-white hover:bg-green-600 p-1.5 rounded-md transition-all"><i class="fa-solid fa-plus"></i></button>
+                    <button onclick="App.Token.add()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-dark-800 text-holder-accumulation hover:text-white hover:bg-green-600 p-1.5 rounded-md transition-all" data-tip="btn_add_token"><i class="fa-solid fa-plus"></i></button>
                 </div>
-            </div>
-            <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider hidden sm:block bg-dark-800 px-3 py-1 rounded-full border border-gray-700">
-                <i class="fa-solid fa-eye mr-1"></i> Monitoramento 1-3 anos
             </div>
         </div>
         
@@ -331,7 +319,7 @@
     <div id="alertsModal" class="fixed inset-0 z-[120] hidden modal-overlay flex items-center justify-center p-4">
         <div class="bg-dark-900 border border-gray-700 rounded-xl shadow-2xl w-full max-w-md max-h-[90dvh] flex flex-col mx-auto animate-fade-in-up">
             <div class="bg-dark-800 p-4 border-b border-gray-700 flex justify-between items-center shrink-0 rounded-t-xl">
-                <h3 class="text-white font-bold">Novo Alerta DCA</h3>
+                <h3 class="text-white font-bold">Novo Alerta</h3>
                 <button onclick="App.Alerts.closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700 text-gray-400"><i class="fa-solid fa-times"></i></button>
             </div>
             <div class="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
@@ -342,8 +330,8 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-1.5 uppercase">Estratégia</label>
                     <select id="alert-type" class="w-full bg-dark-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-holder-accumulation outline-none">
-                        <option value="dca_buy">📉 Comprar (DCA)</option>
-                        <option value="profit_take">📈 Realizar Lucro</option>
+                        <option value="buy">📉 Comprar (Abaixo de)</option>
+                        <option value="sell">📈 Vender (Acima de)</option>
                     </select>
                 </div>
                 <div>
@@ -370,15 +358,6 @@
             </div>
             <div class="p-5 space-y-6 overflow-y-auto flex-1">
                 <div>
-                    <div class="text-xs font-bold text-gray-500 uppercase mb-2">Perfil de Risco</div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button class="p-2 border border-gray-700 rounded bg-dark-800 text-xs font-bold text-gray-300 hover:border-blue-500" onclick="App.Settings.setStrategy('conservative')">Conservador</button>
-                        <button class="p-2 border border-holder-accumulation bg-dark-800 text-xs font-bold text-holder-accumulation">Moderado</button>
-                        <button class="p-2 border border-gray-700 rounded bg-dark-800 text-xs font-bold text-gray-300 hover:border-red-500" onclick="App.Settings.setStrategy('growth')">Agressivo</button>
-                    </div>
-                </div>
-                
-                <div>
                     <div class="text-xs font-bold text-gray-500 uppercase mb-2">Gerenciar Ativos Atuais</div>
                     <div id="settings-tokens-list" class="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 bg-dark-950 rounded border border-gray-800"></div>
                 </div>
@@ -392,7 +371,6 @@
                 <button onclick="App.Token.removeSelected()" class="px-4 py-2 bg-red-900/30 text-red-400 border border-red-900 rounded-lg text-xs font-bold">Excluir Selecionados</button>
                 <div class="flex-1"></div>
                 <button onclick="App.Token.addBatch()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold">Adicionar</button>
-                <button onclick="App.Settings.save()" class="px-6 py-2 bg-holder-accumulation text-white rounded-lg text-xs font-bold">Salvar</button>
             </div>
         </div>
     </div>
@@ -407,9 +385,6 @@
                 <button onclick="App.Export.gen('xlsx')" class="w-full bg-dark-800 border border-gray-600 hover:border-green-500 hover:text-green-400 text-gray-200 font-bold py-3 rounded-lg flex items-center justify-center gap-3 transition-all">
                     <i class="fa-solid fa-table"></i> Dados Completos (.XLSX)
                 </button>
-                <button onclick="App.Export.gen('portfolio')" class="w-full bg-holder-holding hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-3 transition-all">
-                    <i class="fa-solid fa-briefcase"></i> Portfólio Ideal
-                </button>
             </div>
         </div>
     </div>
@@ -421,43 +396,46 @@
             <div class="p-4 cursor-pointer relative z-10 bg-gradient-to-b from-dark-800/40 to-transparent" onclick="App.UI.toggleCard(this)">
                 <div class="flex justify-between items-start mb-3">
                     <div class="flex items-center gap-3">
-                        <div class="score-badge w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold text-black border border-white/20 shadow-lg cursor-help" data-tip="m_score">--</div>
+                        <div class="score-badge w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold text-black border border-white/20 shadow-lg cursor-help" data-tip="score_total">--</div>
                         <div>
                             <h3 class="font-bold text-white text-xl symbol-ticker leading-none tracking-tight">BTC</h3>
                             <div class="text-[10px] text-gray-400 symbol-name truncate max-w-[120px]">Bitcoin</div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-xl font-mono font-bold text-white price-display tracking-tight">$0.00</div>
-                        <div class="text-[10px] font-mono mt-0.5"><span class="val-24h">--</span> <span class="text-gray-600">|</span> <span class="market-cap-value text-gray-400">--</span></div>
+                        <div class="text-xl font-mono font-bold text-white price-display tracking-tight" data-tip="price_curr">$0.00</div>
+                        <div class="text-[10px] font-mono mt-0.5"><span class="val-24h" data-tip="chg_24h">--</span> <span class="text-gray-600">|</span> <span class="market-cap-value text-gray-400" data-tip="mcap">--</span></div>
                     </div>
                 </div>
                 
                 <div class="flex gap-2 mb-3">
-                    <span class="phase-badge text-[9px] font-bold uppercase px-2 py-1 rounded bg-dark-800 text-gray-400 flex-1 text-center border border-gray-800">--</span>
-                    <span class="zone-badge text-[9px] font-bold uppercase px-2 py-1 rounded bg-dark-800 text-gray-400 flex-1 text-center border border-gray-800">--</span>
+                    <span class="phase-badge text-[9px] font-bold uppercase px-2 py-1 rounded bg-dark-800 text-gray-400 flex-1 text-center border border-gray-800" data-tip="cycle_phase">--</span>
+                    <span class="zone-badge text-[9px] font-bold uppercase px-2 py-1 rounded bg-dark-800 text-gray-400 flex-1 text-center border border-gray-800" data-tip="log_zone">--</span>
                 </div>
 
                 <div class="grid grid-cols-4 gap-2 mb-3">
-                    <div class="var-box">
-                        <div class="text-[8px] text-gray-500 uppercase font-bold">1H</div>
-                        <div class="text-[10px] font-bold font-mono val-1h">--</div>
+                    <div class="var-box" data-tip="chg_1h"><div class="text-[8px] text-gray-500 uppercase font-bold">1H</div><div class="text-[10px] font-bold font-mono val-1h">--%</div></div>
+                    <div class="var-box bg-dark-700/30 border-gray-700" data-tip="chg_24h"><div class="text-[8px] text-gray-400 uppercase font-bold">24H</div><div class="text-[10px] font-bold font-mono val-24h-box">--%</div></div>
+                    <div class="var-box" data-tip="chg_7d"><div class="text-[8px] text-gray-500 uppercase font-bold">7D</div><div class="text-[10px] font-bold font-mono val-7d">--%</div></div>
+                    <div class="var-box" data-tip="chg_30d"><div class="text-[8px] text-gray-500 uppercase font-bold">30D</div><div class="text-[10px] font-bold font-mono val-30d">--%</div></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div class="space-y-2">
+                        <h5 class="text-[9px] text-gray-500 uppercase font-bold border-b border-gray-800 pb-1">Fundamentos</h5>
+                        <div class="flex justify-between items-center" data-tip="fdv_ratio"><span class="text-[10px] text-gray-500">MC/FDV:</span><span class="val-mc-fdv font-mono text-[10px] font-bold">--</span></div>
+                        <div class="flex justify-between items-center" data-tip="vol_anual"><span class="text-[10px] text-gray-500">Vol. Anual:</span><span class="val-annual-vol font-mono text-[10px]">--%</span></div>
+                        <div class="flex justify-between items-center" data-tip="rsi_w"><span class="text-[10px] text-gray-500">RSI(W):</span><span class="metric-rsi-weekly font-mono text-[10px] font-bold text-white">--</span></div>
                     </div>
-                    <div class="var-box bg-dark-700/30 border-gray-700">
-                        <div class="text-[8px] text-gray-400 uppercase font-bold">7D</div>
-                        <div class="text-[10px] font-bold font-mono val-7d">--</div>
-                    </div>
-                    <div class="var-box">
-                        <div class="text-[8px] text-gray-500 uppercase font-bold">30D</div>
-                        <div class="text-[10px] font-bold font-mono val-30d">--</div>
-                    </div>
-                    <div class="var-box" data-tip="rsi_weekly">
-                        <div class="text-[8px] text-gray-500 uppercase font-bold">RSI(W)</div>
-                        <div class="text-[10px] font-bold font-mono metric-rsi-weekly text-white">--</div>
+                    <div class="space-y-2">
+                        <h5 class="text-[9px] text-gray-500 uppercase font-bold border-b border-gray-800 pb-1">Análise v3.1</h5>
+                        <div class="flex justify-between items-center" data-tip="asymmetry"><span class="text-[10px] text-gray-500">Assimetria:</span><span class="real-asymmetry-value font-bold text-[10px]">--x</span></div>
+                        <div class="flex justify-between items-center" data-tip="prob_emp"><span class="text-[10px] text-gray-500">Probab.:</span><span class="statistical-probability-value font-bold text-[10px]">--%</span></div>
+                        <div class="flex justify-between items-center" data-tip="risk_class"><span class="text-[10px] text-gray-500">Risco:</span><span class="val-risk-class text-[10px] font-bold">--</span></div>
                     </div>
                 </div>
 
-                <div class="relative h-1.5 w-full bg-dark-900 rounded-full overflow-hidden flex">
+                <div class="relative h-1.5 w-full bg-dark-900 rounded-full overflow-hidden flex cursor-help" data-tip="log_band">
                     <div class="zone-indicator zone-0-20"></div>
                     <div class="zone-indicator zone-20-40"></div>
                     <div class="zone-indicator zone-40-60"></div>
@@ -465,36 +443,34 @@
                     <div class="zone-indicator zone-80-100"></div>
                     <div class="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] z-10 historical-indicator transition-all duration-1000" style="left: 50%;"></div>
                 </div>
-                <div class="text-[9px] text-center text-gray-500 mt-1">Posição Histórica: <span class="historical-position text-gray-300 font-bold">--</span>%</div>
+                <div class="text-[9px] text-center text-gray-500 mt-1">Regressão Logarítmica: <span class="historical-position text-gray-300 font-bold">--</span>%</div>
             </div>
 
             <div class="card-body hidden border-t border-gray-800 bg-dark-900 relative z-20 p-0">
                 <div class="h-56 w-full bg-black chart-container relative">
-                    <div class="absolute top-2 left-2 z-10 text-[9px] text-gray-500">Semanal + SMA200</div>
+                    <div class="absolute top-2 left-2 z-10 text-[9px] text-gray-500 bg-black/50 px-1 rounded">Weekly + SMA20/50/200 + Vol</div>
                 </div>
                 
                 <div class="p-4 space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <h5 class="text-[9px] text-gray-500 uppercase font-bold border-b border-gray-800 pb-1">Fundamentos</h5>
-                            <div class="flex justify-between text-[10px]"><span class="text-gray-500">FDV:</span><span class="val-fdv font-mono text-gray-300">--</span></div>
-                            <div class="flex justify-between text-[10px]"><span class="text-gray-500">Desc. ATH:</span><span class="val-mcap-discount font-mono">--</span></div>
-                            <div class="flex justify-between text-[10px]"><span class="text-gray-500">Inflação:</span><span class="val-inflation font-mono">--</span></div>
-                        </div>
-                        <div class="space-y-2">
-                            <h5 class="text-[9px] text-gray-500 uppercase font-bold border-b border-gray-800 pb-1">Análise H.2.0</h5>
-                            <div class="flex justify-between text-[10px]"><span class="text-gray-500">Assimetria:</span><span class="analysis-asymmetry font-bold">--</span></div>
-                            <div class="flex justify-between text-[10px]"><span class="text-gray-500">Probab.:</span><span class="analysis-probability font-bold">--</span></div>
-                            <div class="flex justify-between text-[10px]"><span class="text-gray-500">Confiança:</span><span class="analysis-confidence font-bold">--</span></div>
-                        </div>
-                    </div>
-
                     <div class="bg-dark-950 p-2 rounded border border-gray-800">
                         <div class="flex justify-between items-center mb-2">
-                            <h5 class="text-[9px] text-gray-500 uppercase font-bold">Alertas Ativos</h5>
+                            <h5 class="text-[9px] text-gray-500 uppercase font-bold" data-tip="card_alerts">Alertas Ativos</h5>
                             <button class="text-[9px] bg-holder-dca_zone/20 text-holder-dca_zone px-2 py-0.5 rounded border border-holder-dca_zone/30" onclick="App.Alerts.openForCard(this)">+ NOVO</button>
                         </div>
                         <div class="alert-list space-y-1 empty:text-[10px] empty:text-gray-600 empty:text-center empty:py-1 text-[10px]"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                         <div class="space-y-2">
+                            <h5 class="text-[9px] text-gray-500 uppercase font-bold border-b border-gray-800 pb-1">Valuation</h5>
+                            <div class="flex justify-between text-[10px]"><span class="text-gray-500" data-tip="fdv">FDV:</span><span class="val-fdv font-mono text-gray-300">--</span></div>
+                            <div class="flex justify-between text-[10px]"><span class="text-gray-500" data-tip="ath_dist">Desc. ATH:</span><span class="val-ath-discount font-mono">--%</span></div>
+                            <div class="flex justify-between text-[10px]"><span class="text-gray-500" data-tip="liq_ratio">Liquidez:</span><span class="val-liq font-mono">--</span></div>
+                        </div>
+                        <div class="space-y-2">
+                            <h5 class="text-[9px] text-gray-500 uppercase font-bold border-b border-gray-800 pb-1">Técnico</h5>
+                            <div class="flex justify-between text-[10px]"><span class="text-gray-500" data-tip="sma_status">SMA 200W:</span><span class="analysis-sma font-bold">--</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -502,16 +478,77 @@
     </template>
 
     <script>
-        // Constants
-        const BINANCE_REST = "https://api.binance.com/api/v3/klines";
-        const COINGECKO_API = "https://api.coingecko.com/api/v3/coins/";
-        
-        const HOLDER_CONFIG = {
-            refreshInterval: 720, 
-            timeframes: ["1d", "1w", "1m"], 
-            ohlcLimits: { "1d": 730, "1w": 208, "1m": 60 },
-            minMarketCap: 100000000, 
-            fundamentalsWeight: { valuation: 0.40, cycle: 0.30, fundamentals: 0.20, technical: 0.10 }
+        // Constants & Config
+        const API = { BINANCE: "https://api.binance.com/api/v3", COINGECKO: "https://api.coingecko.com/api/v3" };
+        const QUANT_CONFIG = { rsiPeriod: 14, volatilityWindow: 52, regressionLookback: 156 };
+
+        // --- MATH & STATISTICS ENGINE (Do gm05.html) ---
+        const Quant = {
+            mean: (arr) => arr.reduce((a, b) => a + b, 0) / arr.length,
+            stdDev: (arr) => { const m = Quant.mean(arr); return Math.sqrt(arr.reduce((sq, n) => sq + Math.pow(n - m, 2), 0) / (arr.length - 1)); },
+            sma: (arr, period) => {
+                if (arr.length < period) return null; 
+                return arr.slice(-period).reduce((a, b) => a + b, 0) / period;
+            },
+            rsi: (closes, period = 14) => {
+                if (closes.length < period + 1) return 50;
+                let gains = 0, losses = 0;
+                for (let i = 1; i <= period; i++) { let diff = closes[i] - closes[i - 1]; if (diff >= 0) gains += diff; else losses -= diff; }
+                let avgGain = gains / period; let avgLoss = losses / period;
+                for (let i = period + 1; i < closes.length; i++) {
+                    let diff = closes[i] - closes[i - 1];
+                    if (diff >= 0) { avgGain = (avgGain * (period - 1) + diff) / period; avgLoss = (avgLoss * (period - 1)) / period; } 
+                    else { avgGain = (avgGain * (period - 1)) / period; avgLoss = (avgLoss * (period - 1) - diff) / period; }
+                }
+                if (avgLoss === 0) return 100;
+                return 100 - (100 / (1 + (avgGain / avgLoss)));
+            },
+            logRegression: (prices) => {
+                const n = prices.length;
+                let sumY = 0, sumLnX = 0, sumYLnX = 0, sumLnX2 = 0;
+                for (let i = 0; i < n; i++) {
+                    let x = i + 1; let lnY = Math.log(prices[i]); let lnX = Math.log(x);
+                    sumY += lnY; sumLnX += lnX; sumYLnX += lnY * lnX; sumLnX2 += lnX * lnX;
+                }
+                const b = (n * sumYLnX - sumLnX * sumY) / (n * sumLnX2 - sumLnX * sumLnX);
+                const a = (sumY - b * sumLnX) / n;
+                let residuals = [];
+                for(let i=0; i<n; i++) residuals.push(Math.log(prices[i]) - (a + b * Math.log(i+1)));
+                const stdev = Quant.stdDev(residuals);
+                const currentX = n; 
+                const fairLnY = a + b * Math.log(currentX);
+                return { 
+                    fair: Math.exp(fairLnY), 
+                    top: Math.exp(fairLnY + 2 * stdev), 
+                    bottom: Math.exp(fairLnY - 2 * stdev), 
+                    stdev: stdev, 
+                    regressionPrice: Math.exp(fairLnY),
+                    params: {a, b}
+                };
+            },
+            volatility: (closes) => {
+                let logReturns = [];
+                for(let i=1; i<closes.length; i++) logReturns.push(Math.log(closes[i] / closes[i-1]));
+                const std = Quant.stdDev(logReturns.slice(-QUANT_CONFIG.volatilityWindow));
+                return std * Math.sqrt(52); 
+            },
+            empiricalProb: (closes, currentZScore, stdev, params) => {
+                let wins = 0;
+                let total = 0;
+                const lookback = Math.min(closes.length - 5, 200); 
+                for(let i = closes.length - lookback; i < closes.length - 4; i++) {
+                    const timeX = i + 1;
+                    const predLog = params.a + params.b * Math.log(timeX);
+                    const actualLog = Math.log(closes[i]);
+                    const z = (actualLog - predLog) / stdev;
+                    if (Math.abs(z - currentZScore) < 0.5) {
+                        total++;
+                        if (closes[i+4] > closes[i]) wins++;
+                    }
+                }
+                if (total < 5) return 50; 
+                return (wins / total) * 100;
+            }
         };
 
         const App = {
@@ -519,321 +556,206 @@
                 tokens: JSON.parse(localStorage.getItem('holder_tokens')) || [
                     {symbol: 'BTCUSDT', name: 'Bitcoin', coinId: 'bitcoin'},
                     {symbol: 'ETHUSDT', name: 'Ethereum', coinId: 'ethereum'},
-                    {symbol: 'SOLUSDT', name: 'Solana', coinId: 'solana'},
-                    {symbol: 'LINKUSDT', name: 'Chainlink', coinId: 'chainlink'},
-                    {symbol: 'AAVEUSDT', name: 'Aave', coinId: 'aave'}
+                    {symbol: 'SOLUSDT', name: 'Solana', coinId: 'solana'}
                 ],
                 alerts: JSON.parse(localStorage.getItem('holder_alerts')) || [],
-                historicalData: JSON.parse(localStorage.getItem('holder_historical')) || {},
-                fundamentalsData: JSON.parse(localStorage.getItem('holder_fundamentals')) || {},
-                settings: JSON.parse(localStorage.getItem('holder_settings')) || { 
-                    strategy: 'balanced', autoRefresh: true, minMarketCap: HOLDER_CONFIG.minMarketCap 
-                },
-                marketData: {}, ohlcData: {}, indicatorsData: {}, scoreData: {}, opportunities: [],
-                activeTab: 'agressive' // Mobile state
+                data: {}, 
+                activeTab: 'agressive'
             },
 
+            // --- LIBRARY (TOOLTIPS ONIPRESENTES & PADRONIZADAS) ---
             Library: {
-                // Simplified for brevity in this optimized file, but logic remains
-                'm_score': { title: "Score HOLDER 2.0", what: "Pontuação 0-100 baseada em Valuation, Ciclo e Fundamentos.", interp: ">70: Compra forte." },
-                'rsi_weekly': { title: "RSI Semanal", what: "Momentum de médio prazo.", interp: "<30: Sobrevendido (Oportunidade)." }
-                // ... (Existing tooltips logic adapts dynamically)
+                // Sistema
+                'sys_logo': { t:"HOLDER PRO", d:"Algoritmo de análise quantitativa de risco e ciclo.", r:"Versão 3.2 Risk Integrated." },
+                'sys_title': { t:"PAINEL DE CONTROLE", d:"Visão geral do mercado com foco em longo prazo.", s:"Use para monitorar saúde da carteira." },
+                'sys_sync': { t:"STATUS DE SINCRONIZAÇÃO", d:"Indica atividade da API em tempo real.", c:"Atualiza a cada 720s." },
+                'sys_auto': { t:"AUTO REFRESH", d:"Contador regressivo para nova análise.", t:"Não feche a aba durante o sync." },
+                'btn_export': { t:"EXPORTAR DADOS", d:"Gera planilha Excel (.xlsx) com todos os indicadores calculados.", s:"Útil para backup ou análise offline." },
+                'btn_refresh': { t:"ATUALIZAR AGORA", d:"Força o recálculo de todos os ativos.", s:"Use após adicionar novos tokens." },
+                'btn_config': { t:"CONFIGURAÇÕES", d:"Gerencie sua lista de ativos e preferências.", s:"Adicione tokens em lote." },
+                'btn_add_token': { t:"ADICIONAR TOKEN", d:"Insere um novo par USDT para monitoramento.", t:"Deve existir na Binance." },
+                'btn_add_alert': { t:"CRIAR ALERTA", d:"Define um preço alvo para notificação.", s:"Use níveis de suporte/resistência." },
+
+                // Tabela Principal
+                'table_header': { t:"PAINEL DE RISCO", d:"Ranking de ativos ordenado pelo Score Holder 3.1.", s:"Foque nos ativos com Score > 70 e Risco A ou B." },
+                'score_total': { t:"SCORE HOLDER 3.1", d:"Nota final de qualidade (0-100).", c:"Valuation(40%) + Ciclo(30%) + Liquidez(20%) + Técnico(10%).", r:">70: Excelente, <40: Ruim.", s:"Priorize ativos com score alto para entradas." },
+                'log_zone': { t:"ZONA LOGARÍTMICA", d:"Posição do preço dentro do canal de regressão de longo prazo.", c:"((LogPreço - LogFundo) / (LogTopo - LogFundo)) * 100.", r:"0-20%: Fundo, 80-100%: Topo.", s:"Compre em zonas baixas (<30%), Venda em zonas altas (>70%)." },
+                'asymmetry': { t:"ASSIMETRIA REAL", d:"Relação Potencial de Lucro / Risco Real.", c:"Upside até Topo Log / Downside até Suporte ou Volatilidade.", r:">4x: Excelente assimetria.", s:"Busque assimetrias altas para proteger capital." },
+                'prob_emp': { t:"PROBABILIDADE EMPÍRICA", d:"Chance histórica de lucro baseada em padrões passados idênticos.", c:"Backtest de situações similares de Desvio Padrão.", r:">60%: Alta probabilidade.", t:"Passado não garante futuro." },
+                'risk_class': { t:"CLASSE DE RISCO", d:"Categorização de segurança estrutural.", c:"Baseado em FDV, Liquidez e Drawdown do ATH.", r:"A: Muito Seguro -> F: Muito Arriscado.", t:"Evite Classe F para Hold." },
+                
+                // Tabs & Zones
+                'tab_acc': { t:"FASE DE ACUMULAÇÃO", d:"Ativos baratos historicamente (Fundo do Canal Log).", s:"Melhor momento para DCA." },
+                'tab_hold': { t:"FASE DE HOLD", d:"Ativos em preço justo ou tendência intermediária.", s:"Manter posição, evitar compras pesadas." },
+                'tab_dist': { t:"FASE DE DISTRIBUIÇÃO", d:"Ativos caros historicamente (Topo do Canal Log).", s:"Realizar lucros parciais." },
+                'zone_buy': { t:"ZONA DE COMPRA", d:"Ativos abaixo de 30% do canal logarítmico.", s:"Foco total em acumulação." },
+                'zone_hold': { t:"ZONA NEUTRA", d:"Ativos entre 40% e 60% do canal.", s:"Aguardar definição." },
+                'zone_sell': { t:"ZONA DE VENDA", d:"Ativos acima de 70% do canal.", s:"Prepare saídas escalonadas." },
+                
+                // Painel Alertas
+                'panel_alerts': { t:"MONITORAMENTO", d:"Lista de preços-alvo vigentes.", s:"Mantenha limpo, remova alertas já atingidos." },
+
+                // Card Metrics
+                'price_curr': { t:"PREÇO ATUAL", d:"Último preço negociado na Binance (USDT)." },
+                'chg_1h': { t:"VARIAÇÃO 1H", d:"Mudança percentual na última hora.", s:"Mede momentum imediato." },
+                'chg_24h': { t:"VARIAÇÃO 24H", d:"Mudança percentual no último dia.", s:"Principal métrica de volatilidade diária." },
+                'chg_7d': { t:"VARIAÇÃO 7D", d:"Mudança percentual na semana.", s:"Identifica tendência de curto prazo." },
+                'chg_30d': { t:"VARIAÇÃO 30D", d:"Mudança percentual no mês.", s:"Identifica tendência de médio prazo." },
+                'mcap': { t:"MARKET CAP", d:"Valor de mercado do supply circulante.", c:"Preço * Circulating Supply.", r:"Microcap < 100M, Largecap > 10B.", t:"Menor Mcap = Maior Volatilidade." },
+                
+                'fdv_ratio': { t:"RAZÃO MC/FDV", d:"Quanto do supply total já está no mercado.", c:"Market Cap / Fully Diluted Valuation.", r:">0.8: Bom (pouca inflação), <0.2: Ruim (muita inflação).", t:"Cuidado com desbloqueios de tokens." },
+                'vol_anual': { t:"VOLATILIDADE ANUAL", d:"Expectativa estatística de variação de preço.", c:"Desvio Padrão dos retornos * Raiz(52).", r:">100%: Altíssima volatilidade.", s:"Reduza tamanho da posição em alta volatilidade." },
+                'rsi_w': { t:"RSI SEMANAL", d:"Índice de Força Relativa (14 períodos).", r:"<30: Sobrevendido (Oportunidade), >70: Sobrecomprado (Risco).", s:"Confluência ideal: RSI baixo + Zona Log baixa." },
+                
+                'log_band': { t:"BARRA DE REGRESSÃO", d:"Visualização da posição do preço no canal.", s:"Marcador à esquerda = Barato. Marcador à direita = Caro." },
+                'cycle_phase': { t:"FASE DO CICLO", d:"Interpretação textual da zona logarítmica.", r:"Acumular, Manter, Realizar." },
+                
+                'card_alerts': { t:"ALERTAS DESTE ATIVO", d:"Alvos específicos configurados para este token." },
+                'fdv': { t:"FULLY DILUTED VALUATION", d:"Valor de mercado se todos os tokens existissem hoje.", t:"Se FDV >> Mcap, risco de diluição." },
+                'ath_dist': { t:"DESCONTO DO ATH", d:"Queda percentual desde o topo histórico.", s:"Em Bull Market, descontos >50% em bons projetos são oportunidades." },
+                'liq_ratio': { t:"RAZÃO DE LIQUIDEZ", d:"Volume negociado em relação ao tamanho do ativo.", c:"Vol24h / Mcap.", r:">0.05: Líquido, <0.01: Ilíquido.", t:"Baixa liquidez = dificuldade de sair da posição." },
+                'sma_status': { t:"SMA 200 SEMANAS", d:"Média de longo prazo. O suporte mais forte do mercado.", s:"Preço acima = Bullish. Preço abaixo = Bearish/Acumulação." },
             },
 
+            // --- CORE FUNCTIONALITY ---
             Core: {
                 init: async () => {
-                    App.UI.setupMobileMenu();
-                    App.UI.tooltips();
+                    App.UI.setupMobileMenu(); 
+                    App.UI.tooltips(); 
                     
-                    await App.Core.preloadAllOHLC();
-                    await App.Core.loadHistoricalData();
-                    await App.Fundamentals.loadFundamentals(); 
+                    await App.Core.refreshData();
+                    App.UI.grid(); // Renderiza grid vazio ou com dados iniciais
+                    App.Alerts.init();
                     
-                    App.UI.grid(); 
-                    App.Opportunities.generate();
-                    
-                    // Timers
-                    setInterval(() => { 
-                        let v = parseInt(document.getElementById('countdown-desktop').innerText); 
-                        let nv = v <= 0 ? HOLDER_CONFIG.refreshInterval : v - 1;
+                    setInterval(() => {
+                        let el = document.getElementById('countdown-desktop');
+                        let v = parseInt(el.innerText);
+                        let nv = v <= 0 ? 720 : v - 1;
                         document.getElementById('countdown-desktop').innerText = nv + 's';
                         document.getElementById('countdown-mobile').innerText = nv + 's';
-                        if (v <= 0) App.Core.refreshData(); 
+                        if (v <= 0) App.Core.refreshData();
                     }, 1000);
-                    
-                    setInterval(() => App.Alerts.checkAllAlerts(), 10000);
-                    App.Alerts.renderAlertsPanel();
-                    document.getElementById('last-update').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    
-                    // Handle search inputs sync
-                    const handleSearch = (e) => {
-                        const term = e.target.value.toUpperCase();
-                        document.querySelectorAll('.card').forEach(c => {
-                            const symbol = c.dataset.symbol;
-                            const name = c.querySelector('.symbol-name')?.textContent || '';
-                            c.style.display = (symbol.includes(term) || name.toUpperCase().includes(term)) ? 'flex' : 'none';
-                        });
-                        // Sync inputs
-                        if(e.target.id === 'searchTokenDesktop') document.getElementById('searchTokenMobile').value = e.target.value;
-                        else document.getElementById('searchTokenDesktop').value = e.target.value;
-                    };
-                    document.getElementById('searchTokenDesktop').addEventListener('input', handleSearch);
-                    document.getElementById('searchTokenMobile').addEventListener('input', handleSearch);
-                },
-                
-                refreshData: () => { 
-                    document.getElementById('last-update').innerText = "Syncing...";
-                    App.Core.preloadAllOHLC(); 
-                    App.Fundamentals.loadFundamentals();
-                    document.getElementById('last-update').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); 
                 },
 
-                fetchOHLC: async (symbol, interval, limit) => {
+                refreshData: async () => {
+                    document.getElementById('last-update').innerText = "Analyzing...";
+                    for (let token of App.State.tokens) {
+                        // Fetch Data Logic from GM05
+                        const klines1h = await App.Core.fetchKlines(token.symbol, '1h', 24); 
+                        const klinesDaily = await App.Core.fetchKlines(token.symbol, '1d', 35); 
+                        const klinesWeekly = await App.Core.fetchKlines(token.symbol, '1w', 250);
+                        const fundamentals = await App.Core.fetchFundamentals(token.coinId);
+
+                        if(klinesWeekly.length > 50) {
+                            // Run Analysis from GM05
+                            const quant = App.Analysis.run(token.symbol, klinesWeekly, klinesDaily, klines1h, fundamentals);
+                            App.State.data[token.symbol] = { klines: { w: klinesWeekly, d: klinesDaily, h: klines1h }, fundamentals, analysis: quant };
+                        }
+                    }
+                    
+                    App.Alerts.checkAll();
+                    App.UI.updateAllCards(); 
+                    App.Opportunities.render();
+                    document.getElementById('last-update').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                },
+
+                fetchKlines: async (symbol, interval, limit) => {
                     try {
-                        const r = await fetch(`${BINANCE_REST}?symbol=${symbol.toUpperCase()}&interval=${interval}&limit=${limit}`);
-                        const j = await r.json();
-                        return j.map(k => ({ time: k[0], open: parseFloat(k[1]), high: parseFloat(k[2]), low: parseFloat(k[3]), close: parseFloat(k[4]), volume: parseFloat(k[5]) }));
+                        const r = await fetch(`${API.BINANCE}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
+                        const d = await r.json();
+                        return d.map(k => ({ time: k[0], open: parseFloat(k[1]), high: parseFloat(k[2]), low: parseFloat(k[3]), close: parseFloat(k[4]), volume: parseFloat(k[5]) }));
                     } catch { return []; }
                 },
-                
-                preloadAllOHLC: async () => {
-                    for (let token of App.State.tokens) {
-                        if (!App.State.ohlcData[token.symbol]) App.State.ohlcData[token.symbol] = {};
-                        for (let tf of HOLDER_CONFIG.timeframes) {
-                            App.State.ohlcData[token.symbol][tf] = await App.Core.fetchOHLC(token.symbol, tf, HOLDER_CONFIG.ohlcLimits[tf]);
-                        }
-                        HOLDER_CONFIG.timeframes.forEach(tf => App.Indicators.updateIndicators(token.symbol.toLowerCase(), tf));
-                        App.Score.calculate(token.symbol);
-                    }
-                    App.UI.updateAllCards();
-                    App.Opportunities.generate();
-                },
 
-                loadHistoricalData: async () => {
-                    if (Object.keys(App.State.historicalData).length > 0) return;
-                    for (let token of App.State.tokens) {
-                        const closes = (App.State.ohlcData[token.symbol]?.["1d"] || []).map(c => c.close);
-                        if (closes.length > 0) {
-                            App.State.historicalData[token.symbol] = {
-                                avg2y: closes.reduce((a, b) => a + b, 0) / closes.length,
-                                priceZones: App.Indicators.calculatePriceZones(closes)
-                            };
-                        }
-                    }
-                    localStorage.setItem('holder_historical', JSON.stringify(App.State.historicalData));
-                },
-
-                fetchCurrentPrice: async (symbol) => {
+                fetchFundamentals: async (coinId) => {
                     try {
-                        const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`);
+                        const r = await fetch(`${API.COINGECKO}/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`);
                         const d = await r.json();
-                        const p = parseFloat(d.price);
-                        if (!App.State.marketData[symbol.toLowerCase()]) App.State.marketData[symbol.toLowerCase()] = {};
-                        App.State.marketData[symbol.toLowerCase()].lastPrice = p;
-                        return p;
-                    } catch { return 0; }
-                },
-
-                calculatePriceChange: (symbol, period) => {
-                    const current = App.State.marketData[symbol.toLowerCase()]?.lastPrice || 0;
-                    if(!current) return 0;
-                    // Mock calculation for demo smoothness without tons of API calls, real app would fetch ticker/24hr
-                    // Using OHLC data loaded
-                    const dayData = App.State.ohlcData[symbol.toUpperCase()]?.["1d"] || [];
-                    if(dayData.length < 30) return 0;
-                    
-                    let prev = 0;
-                    if(period === '24h') prev = dayData[dayData.length-2]?.close;
-                    else if(period === '7d') prev = dayData[dayData.length-8]?.close;
-                    else if(period === '30d') prev = dayData[dayData.length-30]?.close;
-                    else prev = current; // 1h not in daily klines
-
-                    return prev ? ((current - prev) / prev) * 100 : 0;
-                }
-            },
-
-            Indicators: {
-                calculateSMA: (closes, period) => {
-                    if (closes.length < period) return null;
-                    return closes.slice(-period).reduce((a, b) => a + b, 0) / period;
-                },
-                calculateRSI: (closes, period = 14) => {
-                    if (closes.length < period + 1) return 50;
-                    let gains = 0, losses = 0;
-                    for (let i = closes.length - period; i < closes.length; i++) {
-                        const diff = closes[i] - closes[i - 1];
-                        if (diff >= 0) gains += diff; else losses -= diff;
-                    }
-                    if (losses === 0) return 100;
-                    return 100 - (100 / (1 + (gains / losses)));
-                },
-                calculatePriceZones: (closes) => {
-                    const sorted = [...closes].sort((a, b) => a - b);
-                    return {
-                        zone0_20: sorted[Math.floor(sorted.length * 0.0)],
-                        zone20_40: sorted[Math.floor(sorted.length * 0.2)],
-                        zone40_60: sorted[Math.floor(sorted.length * 0.4)],
-                        zone60_80: sorted[Math.floor(sorted.length * 0.6)],
-                        zone80_100: sorted[Math.floor(sorted.length * 0.8)]
-                    };
-                },
-                updateIndicators: (symbol, tf) => {
-                    const data = App.State.ohlcData[symbol.toUpperCase()]?.[tf];
-                    if (!data) return;
-                    const closes = data.map(c => c.close);
-                    
-                    if (!App.State.indicatorsData[symbol]) App.State.indicatorsData[symbol] = {};
-                    if (!App.State.indicatorsData[symbol][tf]) App.State.indicatorsData[symbol][tf] = {};
-                    
-                    const ind = App.State.indicatorsData[symbol][tf];
-                    
-                    if (tf === "1d") {
-                        ind.sma200 = App.Indicators.calculateSMA(closes, 200);
-                        const current = closes[closes.length-1];
-                        const sorted = [...closes].sort((a,b)=>a-b);
-                        ind.historicalPercentile = (sorted.filter(p => p < current).length / sorted.length) * 100;
-                        
-                        // Determine Phase
-                        if (ind.historicalPercentile < 40) ind.holderPhase = 'accumulation';
-                        else if (ind.historicalPercentile > 70) ind.holderPhase = 'profit_taking';
-                        else ind.holderPhase = 'holding';
-                        
-                        // Determine Zone Text
-                        if(ind.historicalPercentile < 20) ind.zone = { zone: '0-20%', name: 'Agressiva' };
-                        else if(ind.historicalPercentile < 40) ind.zone = { zone: '20-40%', name: 'Moderada' };
-                        else if(ind.historicalPercentile < 60) ind.zone = { zone: '40-60%', name: 'Justa' };
-                        else if(ind.historicalPercentile < 80) ind.zone = { zone: '60-80%', name: 'Parcial' };
-                        else ind.zone = { zone: '80-100%', name: 'Total' };
-                    }
-                    if (tf === "1w") ind.rsiWeekly = App.Indicators.calculateRSI(closes, 14);
-                }
-            },
-
-            Fundamentals: {
-                loadFundamentals: async () => {
-                    for (let token of App.State.tokens) {
-                        try {
-                            const r = await fetch(`${COINGECKO_API}${token.coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`);
-                            const d = await r.json();
-                            App.State.fundamentalsData[token.symbol] = {
-                                marketCap: d.market_data?.market_cap?.usd || 0,
-                                fdv: d.market_data?.fully_diluted_valuation?.usd || 0,
-                                ath: d.market_data?.ath?.usd || 0,
-                                athChange: d.market_data?.ath_change_percentage?.usd || 0,
-                                inflation: d.market_data?.total_supply && d.market_data?.circulating_supply ? 
-                                    ((d.market_data.total_supply - d.market_data.circulating_supply) / d.market_data.circulating_supply * 100) : 0
-                            };
-                        } catch (e) { console.log("Erro Gecko", e); }
-                    }
-                }
-            },
-
-            Score: {
-                calculate: (symbol) => {
-                    // Simplistic Score Logic for responsiveness demo
-                    const s = symbol.toLowerCase();
-                    const i = App.State.indicatorsData[s]?.["1d"];
-                    const w = App.State.indicatorsData[s]?.["1w"];
-                    if(!i || !w) return 50;
-                    
-                    let score = 50;
-                    // Valuation (Percentile)
-                    if(i.historicalPercentile < 20) score += 30;
-                    else if(i.historicalPercentile < 40) score += 15;
-                    else if(i.historicalPercentile > 80) score -= 20;
-                    
-                    // RSI
-                    if(w.rsiWeekly < 30) score += 20;
-                    else if(w.rsiWeekly > 70) score -= 20;
-                    
-                    // Technical SMA
-                    const price = App.State.marketData[s]?.lastPrice || 0;
-                    if(price > 0 && i.sma200 && price < i.sma200) score += 10; // Buying below 200DMA is good for holders
-                    
-                    const final = Math.min(100, Math.max(0, Math.round(score)));
-                    
-                    if(!App.State.scoreData[symbol]) App.State.scoreData[symbol] = {};
-                    App.State.scoreData[symbol].total = final;
-                    
-                    // Generate analysis text based on score
-                    App.State.scoreData[symbol].analysis = {
-                        asymmetry: final > 70 ? (3 + (final-70)/10).toFixed(1) : (1 + final/50).toFixed(1),
-                        probability: final > 60 ? (60 + (final-60)).toFixed(0) : (40 + final/5).toFixed(0),
-                        confidence: final > 80 ? 'Alta' : final < 40 ? 'Baixa' : 'Média'
-                    };
-                    
-                    return final;
-                }
-            },
-
-            Opportunities: {
-                generate: () => {
-                    const opps = App.State.tokens.map(t => {
-                        const s = t.symbol.toLowerCase();
-                        const score = App.State.scoreData[t.symbol]?.total || 50;
-                        const ind = App.State.indicatorsData[s]?.["1d"] || {};
-                        const analysis = App.State.scoreData[t.symbol]?.analysis || {asymmetry:'1.0', probability:'50', confidence:'-'};
-                        const price = App.State.marketData[s]?.lastPrice || 0;
-                        
+                        const md = d.market_data;
                         return {
-                            symbol: t.symbol,
-                            name: t.name,
-                            price,
-                            score,
-                            phase: ind.holderPhase || 'holding',
-                            zone: ind.zone?.zone || '--',
-                            zoneName: ind.zone?.name || '-',
-                            asymmetry: analysis.asymmetry,
-                            probability: analysis.probability
+                            price: md.current_price.usd, mcap: md.market_cap.usd, fdv: md.fully_diluted_valuation.usd || md.market_cap.usd,
+                            vol24: md.total_volume.usd, ath: md.ath.usd, ath_change: md.ath_change_percentage.usd,
+                            circ_supply: md.circulating_supply, total_supply: md.total_supply || md.circulating_supply
                         };
-                    }).sort((a,b) => b.score - a.score);
-                    
-                    App.State.opportunities = opps;
-                    App.Opportunities.render();
-                },
-                render: () => {
-                    const tbody = document.getElementById('opportunities-body');
-                    if(tbody) {
-                        tbody.innerHTML = App.State.opportunities.map((o, i) => `
-                            <tr class="table-row-hover border-b border-gray-800 cursor-pointer" onclick="App.UI.scrollToCard('${o.symbol}')">
-                                <td class="p-3 text-center text-gray-500 font-bold">${i+1}</td>
-                                <td class="p-3 sticky left-0 bg-dark-900 font-bold text-white border-r border-gray-800 shadow-md">
-                                    ${o.symbol.replace('USDT','')}
-                                </td>
-                                <td class="p-3 text-center font-bold ${o.score > 70 ? 'text-green-400' : o.score < 40 ? 'text-red-400' : 'text-blue-400'}">${o.score}</td>
-                                <td class="p-3 text-center text-[10px] uppercase font-bold text-gray-400">${o.phase === 'accumulation' ? '🟢 Acumular' : o.phase === 'profit_taking' ? '🔴 Realizar' : '🔵 Manter'}</td>
-                                <td class="p-3 text-center text-[10px] text-gray-400">${o.zone}</td>
-                                <td class="p-3 text-right font-mono text-white">$${o.price.toFixed(2)}</td>
-                                <td class="p-3 text-center font-mono ${o.asymmetry > 3 ? 'text-green-400' : 'text-yellow-400'}">${o.asymmetry}x</td>
-                                <td class="p-3 text-center font-mono text-gray-400">${o.probability}%</td>
-                                <td class="p-3 text-center">
-                                    <button onclick="event.stopPropagation(); App.Alerts.openForSymbol('${o.symbol}')" class="text-holder-accumulation hover:text-white p-2 rounded bg-dark-800 border border-gray-700">
-                                        <i class="fa-solid fa-bell"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('');
-                    }
-                    
-                    // Update Zone Lists
-                    const renderZoneList = (id, items) => {
-                        const el = document.getElementById(id);
-                        if(!el) return;
-                        el.innerHTML = items.map(x => `
-                            <tr class="border-b border-gray-800/50 hover:bg-white/5 cursor-pointer" onclick="App.UI.scrollToCard('${x.symbol}')">
-                                <td class="p-2 font-bold text-white">${x.symbol.replace('USDT','')}</td>
-                                <td class="p-2 text-right text-gray-400 text-[10px]">${x.zone}</td>
-                                <td class="p-2 text-right font-mono text-xs ${x.score > 70 ? 'text-green-400' : 'text-blue-400'}">${x.score}</td>
-                            </tr>
-                        `).join('');
-                    };
-                    
-                    renderZoneList('list-agressive', App.State.opportunities.filter(x => x.zone === '0-20%' || x.zone === '20-40%').slice(0,5));
-                    renderZoneList('list-fair', App.State.opportunities.filter(x => x.zone === '40-60%').slice(0,5));
-                    renderZoneList('list-full', App.State.opportunities.filter(x => x.zone === '60-80%' || x.zone === '80-100%').slice(0,5));
+                    } catch { return null; }
                 }
             },
 
+            // --- ANALYSIS ENGINE (Do gm05.html) ---
+            Analysis: {
+                run: (symbol, w, d, h, fund) => {
+                    const closesW = w.map(k => k.close);
+                    const currentPrice = closesW[closesW.length - 1];
+                    const rsiW = Quant.rsi(closesW, 14);
+                    const volAnn = Quant.volatility(closesW); 
+                    const sma200W = Quant.sma(closesW, 200);
+
+                    const reg = Quant.logRegression(closesW);
+                    const logPrice = Math.log(currentPrice);
+                    const logBottom = Math.log(reg.bottom);
+                    const logTop = Math.log(reg.top);
+                    const positionInBand = Math.max(0, Math.min(100, ((logPrice - logBottom) / (logTop - logBottom)) * 100));
+
+                    const upside = Math.max(0, reg.top - currentPrice);
+                    const distLog = Math.max(0, currentPrice - reg.bottom);
+                    const distSMA = sma200W ? Math.max(0, currentPrice - sma200W) : 0;
+                    const volDrop = currentPrice * (volAnn / 2); 
+                    const downsideReal = Math.max(distLog, distSMA, volDrop);
+                    const asymmetry = downsideReal === 0 ? 10 : (upside / downsideReal);
+
+                    const zScore = (Math.log(currentPrice) - Math.log(reg.regressionPrice)) / reg.stdev;
+                    const probProfit = Quant.empiricalProb(closesW, zScore, reg.stdev, reg.params);
+
+                    const chg1h = h.length > 1 ? ((h[h.length-1].close - h[0].open)/h[0].open)*100 : 0;
+                    const chg24h = d.length > 1 ? ((d[d.length-1].close - d[d.length-2].close)/d[d.length-2].close)*100 : 0; 
+                    const chg7d = d.length > 7 ? ((d[d.length-1].close - d[d.length-8].close)/d[d.length-8].close)*100 : 0;
+                    const chg30d = d.length > 30 ? ((d[d.length-1].close - d[d.length-31].close)/d[d.length-31].close)*100 : 0;
+
+                    const inflation = fund ? ((fund.total_supply - fund.circ_supply) / fund.circ_supply) * 100 : 0;
+                    let rawLiq = fund ? (fund.vol24 / fund.mcap) : 0;
+                    const liqRatio = Math.min(rawLiq, 0.3);
+
+                    let riskScore = 0;
+                    const fdvRatio = fund ? fund.fdv / fund.mcap : 1;
+                    if(fdvRatio > 5) riskScore += 3;
+                    else if(fdvRatio > 2) riskScore += 1;
+                    if(rawLiq < 0.01) riskScore += 3;
+                    else if(rawLiq < 0.03) riskScore += 1;
+                    if(fund && Math.abs(fund.ath_change) > 90) riskScore += 3;
+                    else if(fund && Math.abs(fund.ath_change) > 75) riskScore += 1;
+
+                    const riskPenalty = Math.min(20, riskScore * 2.5);
+                    const riskClass = riskScore >= 7 ? 'F' : riskScore >= 5 ? 'D' : riskScore >= 3 ? 'C' : 'A';
+
+                    let score = 0;
+                    let sc_val_ath = Math.min(100, Math.max(0, Math.abs(fund?.ath_change || 0) * 1.2)); 
+                    let sc_val_inf = Math.max(0, 100 - (inflation * 2));
+                    score += 0.40 * (0.6*sc_val_ath + 0.4*sc_val_inf);
+
+                    let sc_cyc_band = 100 - positionInBand; 
+                    let sc_cyc_sma = sma200W ? ((currentPrice < sma200W) ? 100 : Math.max(0, 100 - ((currentPrice/sma200W - 1)*100))) : 50;
+                    score += 0.30 * (0.7*sc_cyc_band + 0.3*sc_cyc_sma);
+
+                    let sc_fund_liq = Math.min(100, liqRatio * 333); 
+                    score += 0.20 * sc_fund_liq;
+
+                    let sc_tec_rsi = Math.max(0, Math.min(100, (70 - rsiW) * 2.5));
+                    score += 0.10 * sc_tec_rsi;
+
+                    score = Math.max(0, score - riskPenalty);
+
+                    return {
+                        price: currentPrice, rsiW, volAnn, sma200W,
+                        reg, positionInBand, asymmetry, probProfit,
+                        chg: { h1: chg1h, h24: chg24h, d7: chg7d, d30: chg30d },
+                        fund: { inflation, liqRatio, ath_change: fund?.ath_change, fdv: fund?.fdv },
+                        risk: { class: riskClass, penalty: riskPenalty },
+                        score: Math.round(score)
+                    };
+                }
+            },
+
+            // --- UI HANDLERS ---
             UI: {
                 setupMobileMenu: () => {
                     const btn = document.getElementById('mobile-menu-btn');
@@ -841,72 +763,51 @@
                     btn.addEventListener('click', () => {
                         menu.classList.toggle('open');
                         const icon = btn.querySelector('i');
-                        if(menu.classList.contains('open')) icon.className = 'fa-solid fa-times';
-                        else icon.className = 'fa-solid fa-bars';
+                        icon.className = menu.classList.contains('open') ? 'fa-solid fa-times' : 'fa-solid fa-bars';
                     });
                 },
-                
                 switchTab: (tabName) => {
                     App.State.activeTab = tabName;
-                    
-                    // Reset Buttons
                     ['agressive', 'fair', 'full'].forEach(t => {
                         const btn = document.getElementById(`tab-btn-${t}`);
                         const card = document.getElementById(`zone-card-${t}`);
-                        
-                        // Handle Buttons
-                        if (t === tabName) {
-                            btn.className = "flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-active transition-all";
-                        } else {
-                            btn.className = "flex-1 py-2 text-[10px] font-bold uppercase rounded mobile-tab-inactive transition-all";
-                        }
-                        
-                        // Handle Visibility (Mobile only logic via tailwind classes manipulation handled here roughly)
-                        // Actually easier to use display logic directly
-                        if (window.innerWidth < 768) {
-                            card.style.display = (t === tabName) ? 'flex' : 'none';
-                        } else {
-                            card.style.display = 'flex'; // Reset for desktop
-                        }
+                        btn.className = `flex-1 py-2 text-[10px] font-bold uppercase rounded transition-all ${t === tabName ? 'mobile-tab-active' : 'mobile-tab-inactive'}`;
+                        if (window.innerWidth < 768) card.style.display = (t === tabName) ? 'flex' : 'none';
+                        else card.style.display = 'flex';
                     });
                 },
-                
                 scrollToCard: (symbol) => {
                     const card = document.querySelector(`.card[data-symbol="${symbol}"]`);
                     if(card) {
                         card.scrollIntoView({behavior:'smooth', block:'center'});
-                        if(card.querySelector('.card-body').classList.contains('hidden')) {
-                            App.UI.toggleCard(card.querySelector('.card-header') || card.firstElementChild); // trigger toggle
-                        }
+                        if(card.querySelector('.card-body').classList.contains('hidden')) App.UI.toggleCard(card.querySelector('.p-4'));
                     }
                 },
-                
+                // Renderizador de Tooltip Avançado
                 tooltips: () => {
                     const ov = document.getElementById('metric-tooltip-overlay');
                     document.body.addEventListener('click', (e) => { 
                         let t = e.target.closest('[data-tip]'); 
                         if(t){ 
-                            let d = App.Library[t.dataset.tip];
+                            let k = t.dataset.tip;
+                            let d = App.Library[k];
                             if(d) {
-                                ov.innerHTML = `
-                                    <div class="flex-1">
-                                        <h4 class="text-holder-accumulation font-bold text-lg mb-1">${d.title}</h4>
-                                        <p class="text-sm text-gray-300 leading-relaxed mb-2">${d.what}</p>
-                                        <div class="text-xs text-blue-400 font-mono border-t border-gray-800 pt-2">${d.interp}</div>
-                                    </div>
-                                    <button class="absolute top-2 right-2 p-2 text-gray-500" onclick="this.parentElement.classList.add('tooltip-hidden');this.parentElement.classList.remove('tooltip-visible')"><i class="fa-solid fa-times"></i></button>
-                                `;
-                                ov.classList.remove('tooltip-hidden'); 
-                                ov.classList.add('tooltip-visible');
+                                let html = `<div class="flex-1">
+                                    <div class="tt-section"><div class="tt-header tt-def"><i class="fa-solid fa-book"></i> Definição</div><div class="tt-text text-white font-bold">${d.t}</div><div class="tt-text mt-1">${d.d}</div></div>`;
+                                if(d.c) html += `<div class="tt-section"><div class="tt-header tt-calc"><i class="fa-solid fa-calculator"></i> Lógica</div><div class="tt-text font-mono text-xs">${d.c}</div></div>`;
+                                if(d.r) html += `<div class="tt-section"><div class="tt-header tt-ref"><i class="fa-solid fa-ruler"></i> Referência</div><div class="tt-text">${d.r}</div></div>`;
+                                if(d.s) html += `<div class="tt-section"><div class="tt-header tt-strat"><i class="fa-solid fa-chess"></i> Estratégia</div><div class="tt-text">${d.s}</div></div>`;
+                                if(d.t) html += `<div class="tt-section"><div class="tt-header tt-trap"><i class="fa-solid fa-triangle-exclamation"></i> Atenção</div><div class="tt-text">${d.t}</div></div>`;
+                                html += `</div><button class="absolute top-2 right-2 p-2 text-gray-500 hover:text-white" onclick="this.parentElement.classList.add('tooltip-hidden');this.parentElement.classList.remove('tooltip-visible')"><i class="fa-solid fa-times"></i></button>`;
+                                ov.innerHTML = html;
+                                ov.classList.remove('tooltip-hidden'); ov.classList.add('tooltip-visible');
                             }
                             e.stopPropagation(); 
                         } else if(!e.target.closest('#metric-tooltip-overlay')) {
-                             ov.classList.remove('tooltip-visible'); 
-                             ov.classList.add('tooltip-hidden'); 
+                             ov.classList.remove('tooltip-visible'); ov.classList.add('tooltip-hidden'); 
                         }
                     });
                 },
-
                 grid: () => {
                     let g = document.getElementById('cards-grid');
                     g.innerHTML='';
@@ -918,273 +819,328 @@
                         el.querySelector('.symbol-name').innerText = token.name;
                         el.querySelector('.btn-remove').onclick = (e)=>{e.stopPropagation(); App.Token.rem(token.symbol)};
                         g.appendChild(el);
-                        App.UI.updateTokenCard(token.symbol);
                     });
-                    
-                    // Initial Tab State Check
                     App.UI.switchTab('agressive');
                     window.addEventListener('resize', () => App.UI.switchTab(App.State.activeTab));
                 },
-
                 updateAllCards: () => {
-                    App.State.tokens.forEach(token => App.UI.updateTokenCard(token.symbol));
+                    App.State.tokens.forEach(token => {
+                        const data = App.State.data[token.symbol];
+                        if(data) App.UI.updateTokenCard(token.symbol, data);
+                    });
                 },
-
-                updateTokenCard: async (symbol) => {
+                updateTokenCard: (symbol, data) => {
                     const card = document.querySelector(`.card[data-symbol="${symbol}"]`);
                     if(!card) return;
+                    const a = data.analysis;
+                    const f = data.fundamentals;
                     
-                    const s = symbol.toLowerCase();
-                    // Ensure price
-                    if(!App.State.marketData[s]?.lastPrice) await App.Core.fetchCurrentPrice(symbol);
+                    // Header
+                    card.querySelector('.price-display').innerText = '$' + a.price.toFixed(a.price < 1 ? 4 : 2);
+                    if(f?.mcap) card.querySelector('.market-cap-value').innerText = f.mcap > 1e9 ? `$${(f.mcap/1e9).toFixed(1)}B` : `$${(f.mcap/1e6).toFixed(0)}M`;
                     
-                    const m = App.State.marketData[s];
-                    const i = App.State.indicatorsData[s]?.["1d"];
-                    const w = App.State.indicatorsData[s]?.["1w"];
-                    const fund = App.State.fundamentalsData[symbol];
-                    const score = App.State.scoreData[symbol];
+                    // Score & Phase
+                    const sb = card.querySelector('.score-badge');
+                    sb.innerText = a.score;
+                    sb.className = `score-badge w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold text-black border border-white/20 shadow-lg cursor-help ${a.score>70?'bg-score-high':a.score<40?'bg-score-low':'bg-score-mid'}`;
                     
-                    // Price
-                    if(m?.lastPrice) {
-                        card.querySelector('.price-display').innerText = '$' + m.lastPrice.toFixed(2);
-                        // Var 24h
-                        const change = await App.Core.calculatePriceChange(symbol, '24h');
-                        const el24 = card.querySelector('.val-24h');
-                        el24.innerText = (change>0?'+':'')+change.toFixed(2)+'%';
-                        el24.className = `val-24h font-bold ${change>0?'text-green-400':'text-red-400'}`;
+                    const pb = card.querySelector('.phase-badge');
+                    const phaseName = a.positionInBand < 20 ? 'ACUMULAR' : a.positionInBand > 80 ? 'REALIZAR' : 'MANTER';
+                    pb.innerText = phaseName;
+                    pb.className = `phase-badge text-[9px] font-bold uppercase px-2 py-1 rounded bg-dark-800 text-gray-400 flex-1 text-center border border-gray-800 ${phaseName==='ACUMULAR'?'text-green-400 bg-green-900/20':phaseName==='REALIZAR'?'text-red-400 bg-red-900/20':'text-blue-400'}`;
+                    
+                    card.querySelector('.zone-badge').innerText = a.positionInBand.toFixed(0) + '% Log';
+                    
+                    // Variations
+                    const color = v => v > 0 ? 'text-green-400' : 'text-red-400';
+                    card.querySelector('.val-1h').innerHTML = `<span class="${color(a.chg.h1)}">${a.chg.h1.toFixed(2)}%</span>`;
+                    card.querySelector('.val-24h').innerHTML = `${a.chg.h24>0?'+':''}${a.chg.h24.toFixed(2)}%`;
+                    card.querySelector('.val-24h').className = `val-24h font-bold font-mono text-[10px] ${color(a.chg.h24)}`;
+                    card.querySelector('.val-24h-box').innerHTML = `<span class="${color(a.chg.h24)}">${a.chg.h24.toFixed(2)}%</span>`;
+                    card.querySelector('.val-7d').innerHTML = `<span class="${color(a.chg.d7)}">${a.chg.d7.toFixed(2)}%</span>`;
+                    card.querySelector('.val-30d').innerHTML = `<span class="${color(a.chg.d30)}">${a.chg.d30.toFixed(2)}%</span>`;
+
+                    // Metrics
+                    const rsiEl = card.querySelector('.metric-rsi-weekly');
+                    rsiEl.innerText = a.rsiW.toFixed(0);
+                    rsiEl.className = `metric-rsi-weekly font-mono text-[10px] font-bold ${a.rsiW<30?'text-green-400':a.rsiW>70?'text-red-400':'text-white'}`;
+                    
+                    card.querySelector('.val-annual-vol').innerText = (a.volAnn * 100).toFixed(0) + '%';
+                    
+                    if(f?.fdv) {
+                        const ratio = f.mcap / f.fdv;
+                        const fdvEl = card.querySelector('.val-mc-fdv');
+                        fdvEl.innerText = ratio.toFixed(2);
+                        fdvEl.className = `val-mc-fdv font-mono text-[10px] font-bold ${ratio>0.8?'text-green-400':ratio<0.2?'text-red-400':'text-yellow-400'}`;
                     }
 
-                    // Score Badge
-                    if(score) {
-                        const sb = card.querySelector('.score-badge');
-                        sb.innerText = score.total;
-                        sb.className = `score-badge w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold text-black border border-white/20 shadow-lg cursor-help ${score.total>70?'bg-score-high':score.total<40?'bg-score-low':'bg-score-mid'}`;
-                        
-                        // Analysis
-                        if(score.analysis) {
-                            card.querySelector('.analysis-asymmetry').innerText = score.analysis.asymmetry + 'x';
-                            card.querySelector('.analysis-probability').innerText = score.analysis.probability + '%';
-                            card.querySelector('.analysis-confidence').innerText = score.analysis.confidence;
-                        }
-                    }
-
-                    // Indicators
-                    if(i) {
-                        // Badges
-                        card.querySelector('.phase-badge').innerText = i.holderPhase === 'accumulation' ? 'ACUMULAR' : i.holderPhase === 'profit_taking' ? 'REALIZAR' : 'MANTER';
-                        card.querySelector('.phase-badge').className = `phase-badge text-[9px] font-bold uppercase px-2 py-1 rounded flex-1 text-center border border-gray-800 ${i.holderPhase === 'accumulation' ? 'text-green-400 bg-green-900/20' : i.holderPhase === 'profit_taking' ? 'text-red-400 bg-red-900/20' : 'text-blue-400 bg-blue-900/20'}`;
-                        
-                        card.querySelector('.zone-badge').innerText = i.zone?.name || '-';
-                        
-                        // Historical Bar
-                        const bar = card.querySelector('.historical-indicator');
-                        const posTxt = card.querySelector('.historical-position');
-                        if(i.historicalPercentile) {
-                            bar.style.left = `${i.historicalPercentile}%`;
-                            posTxt.innerText = i.historicalPercentile.toFixed(0);
-                        }
-                        
-                        // Apply Main Border Color based on Phase
-                        card.classList.remove('holder-phase-accumulation', 'holder-phase-holding', 'holder-phase-profit');
-                        card.classList.add(`holder-phase-${i.holderPhase}`);
-                    }
+                    card.querySelector('.real-asymmetry-value').innerText = a.asymmetry.toFixed(1) + 'x';
+                    card.querySelector('.statistical-probability-value').innerText = a.probProfit.toFixed(0) + '%';
                     
-                    if(w?.rsiWeekly) {
-                        const rsiEl = card.querySelector('.metric-rsi-weekly');
-                        rsiEl.innerText = w.rsiWeekly.toFixed(0);
-                        rsiEl.className = `metric-rsi-weekly font-mono text-[10px] font-bold ${w.rsiWeekly<30?'text-green-400':w.rsiWeekly>70?'text-red-400':'text-white'}`;
-                    }
+                    const rcEl = card.querySelector('.val-risk-class');
+                    rcEl.innerText = `Classe ${a.risk.class}`;
+                    rcEl.className = `val-risk-class text-[10px] font-bold ${a.risk.class==='A'?'text-green-500':a.risk.class==='F'?'text-red-500':'text-yellow-500'}`;
 
-                    if(fund) {
-                        card.querySelector('.market-cap-value').innerText = fund.marketCap > 1e9 ? `$${(fund.marketCap/1e9).toFixed(1)}B` : `$${(fund.marketCap/1e6).toFixed(0)}M`;
-                        card.querySelector('.val-fdv').innerText = fund.fdv > 1e9 ? `$${(fund.fdv/1e9).toFixed(1)}B` : '-';
-                        card.querySelector('.val-mcap-discount').innerText = fund.athChange.toFixed(1) + '%';
-                        card.querySelector('.val-inflation').innerText = fund.inflation.toFixed(1) + '%';
-                    }
+                    // Log Bar
+                    const bar = card.querySelector('.historical-indicator');
+                    bar.style.left = `${a.positionInBand}%`;
+                    card.querySelector('.historical-position').innerText = a.positionInBand.toFixed(0);
+
+                    // Body details
+                    card.querySelector('.val-fdv').innerText = f?.fdv ? (f.fdv > 1e9 ? `$${(f.fdv/1e9).toFixed(1)}B` : '-') : '-';
+                    card.querySelector('.val-ath-discount').innerText = f?.ath_change ? f.ath_change.toFixed(1) + '%' : '-';
+                    card.querySelector('.val-liq').innerText = a.fund.liqRatio.toFixed(3);
+                    card.querySelector('.analysis-sma').innerText = a.sma200W ? '$' + a.sma200W.toFixed(2) : '-';
+
+                    App.Alerts.renderInCard(symbol, card.querySelector('.alert-list'));
+                    if (!card.querySelector('.card-body').classList.contains('hidden')) App.UI.renderChart(card);
                     
-                    App.Alerts.renderInCard(symbol);
-                    if (!card.querySelector('.card-body').classList.contains('hidden')) App.UI.updateChart(card);
+                    // Phase border color
+                    card.classList.remove('holder-phase-accumulation', 'holder-phase-holding', 'holder-phase-profit');
+                    if (a.positionInBand < 20) card.classList.add('holder-phase-accumulation');
+                    else if (a.positionInBand > 80) card.classList.add('holder-phase-profit');
+                    else card.classList.add('holder-phase-holding');
                 },
-
                 toggleCard: (el) => {
                     let card = el.closest('.card');
                     let b = card.querySelector('.card-body');
                     if(b.classList.contains('hidden')) {
-                        document.querySelectorAll('.card-body').forEach(e=>e.classList.add('hidden'));
+                        document.querySelectorAll('.card-body').forEach(e => e.classList.add('hidden'));
                         b.classList.remove('hidden');
-                        App.UI.updateChart(card);
-                    } else {
-                        b.classList.add('hidden');
-                    }
+                        App.UI.renderChart(card);
+                    } else b.classList.add('hidden');
                 },
-
-                updateChart: (card) => {
-                    const c = card.querySelector('.chart-container');
-                    if (!c || c.querySelector('canvas')) return;
-                    c.innerHTML='';
+                renderChart: (card) => {
+                    const sym = card.dataset.symbol;
+                    const d = App.State.data[sym];
+                    const container = card.querySelector('.chart-container');
+                    if(!d || !container) return;
                     
-                    let chart = LightweightCharts.createChart(c, {
-                        layout:{background:{color:'#000000'},textColor:'#6b7280'},
-                        grid:{vertLines:{color:'#1f2937'},horzLines:{color:'#1f2937'}},
-                        timeScale:{timeVisible:true, secondsVisible:false},
-                        rightPriceScale: { borderVisible: false },
-                        crosshair: { vertLine: { labelVisible: false } }
+                    container.innerHTML = '';
+                    const chart = LightweightCharts.createChart(container, {
+                        layout: { background: { color: '#000000' }, textColor: '#6b7280', fontSize: 11 },
+                        grid: { vertLines: { color: '#1f2937' }, horzLines: { color: '#1f2937' } },
+                        rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.1, bottom: 0.1 } },
+                        timeScale: { timeVisible: true, secondsVisible: false },
+                        width: container.clientWidth, height: container.clientHeight
                     });
                     
-                    let s = chart.addCandlestickSeries({upColor:'#10b981',downColor:'#ef4444', borderVisible: false, wickUpColor:'#10b981', wickDownColor:'#ef4444'});
-                    let d = App.Core.getOHLC(card.dataset.symbol, "1w"); // Weekly chart for holders
-                    if(d && d.length) s.setData(d.map(x=>({time:x.time/1000,open:x.open,high:x.high,low:x.low,close:x.close})));
+                    const candleSeries = chart.addCandlestickSeries({ upColor: '#10b981', downColor: '#ef4444', borderVisible: false, wickUpColor: '#10b981', wickDownColor: '#ef4444' });
+                    candleSeries.setData(d.klines.w.map(k => ({ time: k.time/1000, open: k.open, high: k.high, low: k.low, close: k.close })));
                     
+                    const sma20 = chart.addLineSeries({ color: '#f59e0b', lineWidth: 1 });
+                    const sma200 = chart.addLineSeries({ color: '#3b82f6', lineWidth: 2 });
+                    
+                    const smaData20 = []; const smaData200 = [];
+                    const closes = d.klines.w.map(k=>k.close);
+                    for(let i=0; i<closes.length; i++) {
+                        if(i >= 19) smaData20.push({ time: d.klines.w[i].time/1000, value: Quant.sma(closes.slice(0, i+1), 20) });
+                        if(i >= 199) smaData200.push({ time: d.klines.w[i].time/1000, value: Quant.sma(closes.slice(0, i+1), 200) });
+                    }
+                    sma20.setData(smaData20); sma200.setData(smaData200);
                     chart.timeScale().fitContent();
+                }
+            },
+
+            // --- OPPORTUNITIES & ALERTS ---
+            Opportunities: {
+                render: () => {
+                    const data = Object.keys(App.State.data).map(k => ({s: k, ...App.State.data[k]})).sort((a,b) => b.analysis.score - a.analysis.score);
+                    const tbody = document.getElementById('opportunities-body');
+                    if(tbody) {
+                        tbody.innerHTML = data.map((d, i) => {
+                            const a = d.analysis;
+                            const phase = a.positionInBand < 20 ? 'Acumular' : a.positionInBand > 80 ? 'Realizar' : 'Manter';
+                            const zoneName = a.positionInBand < 20 ? 'Fundo' : a.positionInBand > 80 ? 'Topo' : 'Meio';
+                            return `
+                                <tr class="table-row-hover border-b border-gray-800 cursor-pointer" onclick="App.UI.scrollToCard('${d.s}')">
+                                    <td class="p-3 text-center text-gray-500 font-bold">${i+1}</td>
+                                    <td class="p-3 sticky left-0 bg-dark-900 font-bold text-white border-r border-gray-800 shadow-md">${d.s.replace('USDT','')}</td>
+                                    <td class="p-3 text-center font-bold ${a.score>70?'text-green-400':a.score<40?'text-red-400':'text-blue-400'}">${a.score}</td>
+                                    <td class="p-3 text-center text-[10px] text-gray-400">${zoneName} (${a.positionInBand.toFixed(0)}%)</td>
+                                    <td class="p-3 text-right font-mono text-white">$${a.price.toFixed(2)}</td>
+                                    <td class="p-3 text-center font-mono ${a.asymmetry>3?'text-green-400':'text-yellow-400'}">${a.asymmetry.toFixed(1)}x</td>
+                                    <td class="p-3 text-center font-mono text-gray-400">${a.probProfit.toFixed(0)}%</td>
+                                    <td class="p-3 text-center font-bold text-xs ${a.risk.class==='A'?'text-green-500':a.risk.class==='F'?'text-red-500':'text-yellow-500'}">${a.risk.class}</td>
+                                    <td class="p-3 text-center"><button onclick="event.stopPropagation(); App.Alerts.openForSymbol('${d.s}')" class="text-holder-accumulation hover:text-white p-2 rounded bg-dark-800 border border-gray-700"><i class="fa-solid fa-bell"></i></button></td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
                     
-                    // Handle resize
-                    const ro = new ResizeObserver(entries => {
-                        const cr = entries[0].contentRect;
-                        chart.resize(cr.width, cr.height);
-                    });
-                    ro.observe(c);
+                    const renderZone = (id, filterFn) => {
+                        const el = document.getElementById(id);
+                        if(!el) return;
+                        el.innerHTML = data.filter(filterFn).map(d => `
+                            <tr class="border-b border-gray-800/50 hover:bg-white/5 cursor-pointer" onclick="App.UI.scrollToCard('${d.s}')">
+                                <td class="p-2 font-bold text-white">${d.s.replace('USDT','')}</td>
+                                <td class="p-2 text-right text-gray-400 text-[10px]">${d.analysis.positionInBand.toFixed(0)}%</td>
+                                <td class="p-2 text-right font-mono text-xs ${d.analysis.score>70?'text-green-400':'text-blue-400'}">${d.analysis.score}</td>
+                            </tr>
+                        `).join('');
+                    };
+                    renderZone('list-agressive', d => d.analysis.positionInBand <= 30);
+                    renderZone('list-fair', d => d.analysis.positionInBand > 30 && d.analysis.positionInBand <= 70);
+                    renderZone('list-full', d => d.analysis.positionInBand > 70);
                 }
             },
 
             Alerts: {
-                // Simplified Alert Logic
-                openModal: () => {
+                init: () => App.Alerts.renderPanel(),
+                save: () => {
+                    localStorage.setItem('holder_alerts', JSON.stringify(App.State.alerts));
+                    App.Alerts.renderPanel();
+                    App.UI.updateAllCards();
+                },
+                openModal: () => document.getElementById('alertsModal').classList.remove('hidden'),
+                openForSymbol: (s) => {
+                    App.Alerts.openModal();
                     const sel = document.getElementById('alert-symbol');
                     sel.innerHTML = '';
                     App.State.tokens.forEach(t => {
                         const opt = document.createElement('option');
-                        opt.value = t.symbol;
-                        opt.text = t.symbol.replace('USDT','');
+                        opt.value = t.symbol; opt.text = t.symbol.replace('USDT','');
                         sel.appendChild(opt);
                     });
-                    document.getElementById('alertsModal').classList.remove('hidden');
-                },
-                openForSymbol: (s) => {
-                    App.Alerts.openModal();
-                    document.getElementById('alert-symbol').value = s;
+                    sel.value = s;
+                    document.getElementById('alert-price').value = '';
                 },
                 closeModal: () => document.getElementById('alertsModal').classList.add('hidden'),
                 createAlert: () => {
                     const sym = document.getElementById('alert-symbol').value;
-                    const price = parseFloat(document.getElementById('alert-price').value);
                     const type = document.getElementById('alert-type').value;
+                    const price = parseFloat(document.getElementById('alert-price').value);
+                    const notes = document.getElementById('alert-notes').value;
                     if(!sym || !price) return;
-                    
-                    App.State.alerts.push({id:Date.now(), symbol:sym, price, type, triggered:false});
-                    localStorage.setItem('holder_alerts', JSON.stringify(App.State.alerts));
-                    App.Alerts.renderAlertsPanel();
-                    App.Alerts.renderInCard(sym);
+                    App.State.alerts.push({ id: Date.now(), symbol: sym, type, targetPrice: price, notes, triggered: false });
+                    App.Alerts.save();
                     App.Alerts.closeModal();
                 },
-                renderAlertsPanel: () => {
-                    const div = document.getElementById('alertsContent');
-                    if(!div) return;
-                    div.innerHTML = App.State.alerts.length ? '' : '<div class="text-xs text-gray-500 text-center py-4">Sem alertas configurados</div>';
-                    App.State.alerts.forEach(a => {
-                        const el = document.createElement('div');
-                        el.className = `flex justify-between items-center p-2 rounded border border-gray-800 bg-dark-800 mb-2 ${a.triggered ? 'border-green-500' : ''}`;
-                        el.innerHTML = `
-                            <div>
-                                <div class="font-bold text-xs text-white">${a.symbol.replace('USDT','')} <span class="${a.type==='dca_buy'?'text-green-400':'text-orange-400'}">${a.type==='dca_buy'?'COMPRAR':'VENDER'}</span></div>
-                                <div class="text-[10px] text-gray-400">Alvo: $${a.price} ${a.triggered ? '(ATINGIDO)' : ''}</div>
-                            </div>
-                            <button onclick="App.Alerts.remove(${a.id})" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-times"></i></button>
-                        `;
-                        div.appendChild(el);
-                    });
-                },
-                renderInCard: (sym) => {
-                    const card = document.querySelector(`.card[data-symbol="${sym}"]`);
-                    if(!card) return;
-                    const list = card.querySelector('.alert-list');
-                    const alerts = App.State.alerts.filter(a => a.symbol === sym);
-                    list.innerHTML = '';
-                    alerts.forEach(a => {
-                        list.innerHTML += `<div class="flex justify-between text-[10px] text-gray-400 border-b border-gray-800 pb-1 mb-1"><span>$${a.price} (${a.type==='dca_buy'?'DCA':'LUCRO'})</span><span>${a.triggered?'✓':''}</span></div>`;
-                    });
-                },
-                remove: (id) => {
-                    App.State.alerts = App.State.alerts.filter(a => a.id !== id);
-                    localStorage.setItem('holder_alerts', JSON.stringify(App.State.alerts));
-                    App.Alerts.renderAlertsPanel();
-                    App.UI.updateAllCards();
-                },
-                checkAllAlerts: () => {
-                    let updated = false;
+                openForCard: (btn) => App.Alerts.openForSymbol(btn.closest('.card').dataset.symbol),
+                remove: (id) => { App.State.alerts = App.State.alerts.filter(a => a.id !== id); App.Alerts.save(); },
+                checkAll: () => {
+                    let trig = false;
                     App.State.alerts.forEach(a => {
                         if(a.triggered) return;
-                        const curr = App.State.marketData[a.symbol.toLowerCase()]?.lastPrice;
-                        if(!curr) return;
-                        if((a.type === 'dca_buy' && curr <= a.price) || (a.type === 'profit_take' && curr >= a.price)) {
-                            a.triggered = true;
-                            updated = true;
-                            alert(`ALERTA HOLDER: ${a.symbol} atingiu o alvo de $${a.price}!`);
+                        const d = App.State.data[a.symbol];
+                        if(!d) return;
+                        const p = d.analysis.price;
+                        if((a.type === 'buy' && p <= a.targetPrice) || (a.type === 'sell' && p >= a.targetPrice)) {
+                            a.triggered = true; trig = true;
+                            alert(`ALERTA: ${a.symbol} atingiu $${a.targetPrice}`);
                         }
                     });
-                    if(updated) {
-                        localStorage.setItem('holder_alerts', JSON.stringify(App.State.alerts));
-                        App.Alerts.renderAlertsPanel();
-                        App.UI.updateAllCards();
-                    }
+                    if(trig) App.Alerts.save();
                 },
-                openForCard: (btn) => {
-                    const s = btn.closest('.card').dataset.symbol;
-                    App.Alerts.openForSymbol(s);
+                renderPanel: () => {
+                    const div = document.getElementById('alertsContent');
+                    if(App.State.alerts.length === 0) { div.innerHTML = '<div class="text-xs text-gray-500 text-center py-4">Sem alertas configurados</div>'; return; }
+                    div.innerHTML = App.State.alerts.map(a => `
+                        <div class="flex justify-between items-center p-2 rounded border ${a.triggered?'border-green-500 bg-green-900/10':'border-gray-800 bg-dark-800'} mb-2">
+                            <div>
+                                <div class="font-bold text-xs text-white">${a.symbol.replace('USDT','')} <span class="${a.type==='buy'?'text-green-400':'text-red-400'}">${a.type.toUpperCase()}</span> ${a.triggered?'✓':''}</div>
+                                <div class="text-[10px] text-gray-400">Alvo: $${a.targetPrice}</div>
+                                ${a.notes ? `<div class="text-[9px] text-gray-500">${a.notes}</div>` : ''}
+                            </div>
+                            <button onclick="App.Alerts.remove(${a.id})" class="text-gray-500 hover:text-red-500 ml-2"><i class="fa-solid fa-times"></i></button>
+                        </div>
+                    `).join('');
+                },
+                renderInCard: (s, container) => {
+                    const alerts = App.State.alerts.filter(a => a.symbol === s && !a.triggered);
+                    if(alerts.length === 0) { container.innerHTML = '<div class="text-gray-600 italic">Nenhum alerta</div>'; return; }
+                    container.innerHTML = alerts.map(a => `
+                        <div class="flex justify-between items-center text-[10px] border-b border-gray-800/50 pb-0.5">
+                            <span class="${a.type==='buy'?'text-green-400':'text-red-400'} font-bold">${a.type.toUpperCase()}</span>
+                            <span class="font-mono text-gray-300">$${a.targetPrice}</span>
+                            <button onclick="App.Alerts.remove(${a.id})" class="text-gray-500 hover:text-red-500">×</button>
+                        </div>
+                    `).join('');
                 }
             },
 
+            // --- SETTINGS (Do deepseek.html - Preservado) ---
+            Settings: {
+                openModal: () => {
+                    document.getElementById('settingsModal').classList.remove('hidden');
+                    const l = document.getElementById('settings-tokens-list');
+                    l.innerHTML = App.State.tokens.map(t => `
+                        <label class="inline-flex items-center bg-dark-800 px-2 py-1 rounded text-xs border border-gray-700 mr-2 mb-2">
+                            <input type="checkbox" value="${t.symbol}" class="mr-1"> ${t.symbol.replace('USDT','')}
+                        </label>
+                    `).join('');
+                },
+                closeModal: () => document.getElementById('settingsModal').classList.add('hidden')
+            },
+
+            // --- TOKEN MANAGEMENT (Do deepseek.html - Preservado) ---
             Token: {
                 add: async () => {
                     const inp = document.getElementById('add-input');
                     let s = inp.value.trim().toUpperCase();
                     if(!s) return;
                     if(!s.endsWith('USDT')) s += 'USDT';
-                    if(App.State.tokens.find(t=>t.symbol===s)) return alert('Já existe');
-                    
-                    // Simple Validation fetch
+                    if(App.State.tokens.find(t=>t.symbol===s)) return alert('Token já existe.');
                     const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${s}`);
-                    if(r.status !== 200) return alert('Token não encontrado na Binance');
-                    
-                    App.State.tokens.push({symbol:s, name: s.replace('USDT',''), coinId: s.replace('USDT','').toLowerCase()});
+                    if(r.status !== 200) return alert('Token não encontrado na Binance.');
+                    const n = s.replace('USDT','');
+                    App.State.tokens.push({symbol: s, name: n, coinId: n.toLowerCase()});
                     localStorage.setItem('holder_tokens', JSON.stringify(App.State.tokens));
-                    location.reload();
+                    inp.value = ''; location.reload();
                 },
                 rem: (s) => {
-                    if(confirm('Remover ativo?')) {
+                    if(confirm(`Remover ${s}?`)) {
                         App.State.tokens = App.State.tokens.filter(t => t.symbol !== s);
                         localStorage.setItem('holder_tokens', JSON.stringify(App.State.tokens));
                         location.reload();
                     }
                 },
-                // Settings implementations omitted for brevity but UI hooks exist
-                removeSelected: () => { /* impl */ },
-                addBatch: () => { /* impl */ }
-            },
-            
-            Settings: {
-                openModal: () => {
-                    document.getElementById('settingsModal').classList.remove('hidden');
-                    const l = document.getElementById('settings-tokens-list');
-                    l.innerHTML = App.State.tokens.map(t => `<div class="inline-block bg-dark-800 px-2 py-1 rounded text-xs border border-gray-700 mr-2 mb-2">${t.symbol}</div>`).join('');
+                removeSelected: () => {
+                    const selected = Array.from(document.querySelectorAll('#settings-tokens-list input:checked')).map(cb => cb.value);
+                    if(selected.length === 0) return;
+                    if(confirm(`Remover ${selected.length} tokens?`)) {
+                        App.State.tokens = App.State.tokens.filter(t => !selected.includes(t.symbol));
+                        localStorage.setItem('holder_tokens', JSON.stringify(App.State.tokens));
+                        location.reload();
+                    }
                 },
-                closeModal: () => document.getElementById('settingsModal').classList.add('hidden'),
-                save: () => App.Settings.closeModal(),
-                setStrategy: (s) => { /* Visual toggle logic */ }
+                addBatch: () => {
+                    const txt = document.getElementById('batch-tokens');
+                    const tokens = txt.value.trim().toUpperCase().split('\n').filter(t => t.trim());
+                    tokens.forEach(t => {
+                        let s = t.trim();
+                        if(!s.endsWith('USDT')) s += 'USDT';
+                        if(!App.State.tokens.find(e => e.symbol === s)) App.State.tokens.push({symbol:s, name:s.replace('USDT',''), coinId:s.replace('USDT','').toLowerCase()});
+                    });
+                    localStorage.setItem('holder_tokens', JSON.stringify(App.State.tokens));
+                    location.reload();
+                }
             },
 
             Export: {
                 openModal: () => document.getElementById('export-modal').classList.remove('hidden'),
                 closeModal: () => document.getElementById('export-modal').classList.add('hidden'),
                 gen: (t) => {
-                    const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.json_to_sheet(App.State.opportunities);
-                    XLSX.utils.book_append_sheet(wb, ws, "Dados");
-                    XLSX.writeFile(wb, "CryptoHolder.xlsx");
+                    if(t === 'xlsx') {
+                        const data = Object.keys(App.State.data).map(k => App.State.data[k]).map(d => ({
+                            Symbol: d.klines.w[0] ? 'UNK' : 'CHECK', // Simulação
+                            Price: d.analysis.price,
+                            Score: d.analysis.score,
+                            Risk: d.analysis.risk.class,
+                            Asymmetry: d.analysis.asymmetry.toFixed(2),
+                            Prob: d.analysis.probProfit.toFixed(0) + '%'
+                        }));
+                        const wb = XLSX.utils.book_new();
+                        const ws = XLSX.utils.json_to_sheet(data);
+                        XLSX.utils.book_append_sheet(wb, ws, "Holder Data");
+                        XLSX.writeFile(wb, "HolderRiskData.xlsx");
+                    }
                     App.Export.closeModal();
                 }
             }
         };
 
+        if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
         document.addEventListener('DOMContentLoaded', App.Core.init);
     </script>
 </body>
